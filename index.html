@@ -45,6 +45,43 @@
     }
     .icon-btn:hover { border-color: #333; color: #333; }
 
+    /* Tooltip del botón info */
+    .icon-info {
+      position: relative;
+    }
+    .tooltip {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: #fff;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      width: 320px;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #333;
+      line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      z-index: 100;
+    }
+    .tooltip::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      right: 10px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-left: 1.5px solid #ccc;
+      border-top: 1.5px solid #ccc;
+      transform: rotate(45deg);
+    }
+    .icon-info:hover .tooltip {
+      display: block;
+    }
+
     /* Contenido principal */
     .main-content {
       max-width: 1200px;
@@ -210,8 +247,10 @@
   <div class="header-bar">
     <img src="img/logo.png" alt="Alcald&iacute;a Mayor de Bogot&aacute; - Secretar&iacute;a de Integraci&oacute;n Social - Bogot&aacute;">
     <div class="header-right">
-      <a class="icon-btn" title="Ayuda">?</a>
-      <a class="icon-btn" title="Informaci&oacute;n">i</a>
+      <a class="icon-btn" href="guia.html" title="Gu&iacute;a de navegaci&oacute;n">?</a>
+      <a class="icon-btn icon-info" title="Informaci&oacute;n">i
+        <div class="tooltip">Nota: Cada p&aacute;gina tiene este &iacute;cono en donde se encuentran la especificaci&oacute;n de los datos presentados. Fecha de creaci&oacute;n de la visualizaci&oacute;n: julio 2024 – Subdirecci&oacute;n para la Juventud.</div>
+      </a>
     </div>
   </div>
 
