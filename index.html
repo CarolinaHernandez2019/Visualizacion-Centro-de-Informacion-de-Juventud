@@ -8,7 +8,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f2f2f2;
+      background: #fff;
       color: #333;
     }
 
@@ -16,15 +16,18 @@
     .header-bar {
       background: #fff;
       border-bottom: 4px solid #d4a017;
-      padding: 8px 24px;
+      padding: 10px 24px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      position: relative;
     }
-    .header-bar img { height: 55px; }
+    .header-bar img { height: 60px; }
     .header-right {
       display: flex;
       gap: 8px;
+      position: absolute;
+      right: 24px;
     }
     .icon-btn {
       width: 36px; height: 36px;
@@ -42,69 +45,103 @@
     }
     .icon-btn:hover { border-color: #333; color: #333; }
 
-    /* Página principal */
-    .page-bg {
-      background: #f2f2f2;
-      min-height: calc(100vh - 75px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .page-card {
-      background: #fff;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    /* Contenido principal */
+    .main-content {
       max-width: 1200px;
       width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
       display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      min-height: 520px;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 2rem;
+      min-height: calc(100vh - 80px);
+      align-items: start;
     }
     @media (max-width: 850px) {
-      .page-card { grid-template-columns: 1fr; }
+      .main-content { grid-template-columns: 1fr; }
     }
 
     /* Lado izquierdo */
     .left {
-      padding: 3rem 2.5rem;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
+      padding-top: 1rem;
     }
     .titulo {
-      font-size: 3.5rem;
-      font-weight: 600;
+      font-size: 3.8rem;
+      font-weight: 800;
       color: #c8a415;
-      line-height: 1.18;
+      line-height: 1.15;
       letter-spacing: -0.5px;
+      margin-bottom: 2.5rem;
     }
     @media (max-width: 600px) {
-      .titulo { font-size: 2.2rem; }
-      .left { padding: 2rem 1.5rem; }
+      .titulo { font-size: 2.4rem; }
     }
+
+    /* Sección de estadísticas */
+    .stats-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    .stats-cards {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 1.2rem;
+    }
+    .stat-card {
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 180px;
+    }
+    .stat-icon {
+      font-size: 2.2rem;
+      color: #333;
+      flex-shrink: 0;
+    }
+    .stat-icon svg {
+      width: 42px;
+      height: 42px;
+      fill: #333;
+    }
+    .stat-number {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #333;
+      line-height: 1.3;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #555;
+      font-weight: 400;
+    }
+
 
     /* Lado derecho */
     .right {
-      padding: 2rem 2.5rem 2rem 1.5rem;
+      padding-top: 0.5rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
     }
     .dim-intro {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: #333;
       margin-bottom: 1.2rem;
       text-align: center;
       line-height: 1.6;
     }
 
-    /* Flechas - replicando el estilo Power BI */
+    /* Cintas / flechas */
     .dim-list {
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      max-width: 380px;
+      gap: 4px;
+      max-width: 360px;
       margin: 0 auto;
     }
     .dim-arrow {
@@ -115,41 +152,36 @@
       color: #fff;
       font-size: 0.95rem;
       font-weight: 700;
-      padding: 10px 28px 10px 24px;
-      min-height: 44px;
+      padding: 11px 30px 11px 22px;
+      min-height: 46px;
       text-align: center;
       text-shadow: 0 1px 2px rgba(0,0,0,0.15);
-      transition: transform 0.12s;
+      transition: transform 0.15s;
       clip-path: polygon(4% 0%, 92% 0%, 100% 50%, 92% 100%, 4% 100%, 0% 50%);
     }
     .dim-arrow:first-child {
       clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%);
       padding-left: 16px;
     }
-    .dim-arrow:hover:not(.disabled) {
-      transform: translateX(4px);
+    /* Intercaladas: las pares se desplazan a la derecha */
+    .dim-arrow:nth-child(even) {
+      margin-left: 20px;
     }
-    .dim-arrow.disabled {
-      pointer-events: none;
+    .dim-arrow:nth-child(odd) {
+      margin-left: 0;
+    }
+    .dim-arrow:hover {
+      transform: translateX(6px);
     }
 
-    /* Colores extraídos del Power BI */
-    .dim-arrow:nth-child(1) { background: #c9a51a; }  /* dorado */
-    .dim-arrow:nth-child(2) { background: #c49518; }  /* dorado oscuro */
-    .dim-arrow:nth-child(3) { background: #8c6d10; }  /* marrón dorado */
-    .dim-arrow:nth-child(4) { background: #c43838; }  /* rojo */
-    .dim-arrow:nth-child(5) { background: #a32a2a; }  /* rojo oscuro */
-    .dim-arrow:nth-child(6) { background: #5e1818; }  /* guinda */
-    .dim-arrow:nth-child(7) { background: #7a6a1e; }  /* oliva oscuro */
-
-    .badge-prox {
-      font-size: 0.55rem;
-      font-weight: 500;
-      background: rgba(255,255,255,0.25);
-      padding: 2px 7px;
-      border-radius: 8px;
-      margin-left: 8px;
-    }
+    /* Colores */
+    .dim-arrow:nth-child(1) { background: #c9a51a; }
+    .dim-arrow:nth-child(2) { background: #c49518; }
+    .dim-arrow:nth-child(3) { background: #8c6d10; }
+    .dim-arrow:nth-child(4) { background: #c43838; }
+    .dim-arrow:nth-child(5) { background: #a32a2a; }
+    .dim-arrow:nth-child(6) { background: #5e1818; }
+    .dim-arrow:nth-child(7) { background: #7a6a1e; }
   </style>
 </head>
 <body>
@@ -164,28 +196,65 @@
   </div>
 
   <!-- Contenido -->
-  <div class="page-bg">
-    <div class="page-card">
-      <div class="left">
-        <h1 class="titulo">Centro de<br>Informaci&oacute;n<br>de Juventud</h1>
-      </div>
-      <div class="right">
-        <p class="dim-intro">
-          Te invitamos a conocer m&aacute;s <strong>informaci&oacute;n en cada dimensi&oacute;n</strong> de la<br>
-          <strong>Pol&iacute;tica P&uacute;blica Distrital de Juventud</strong> de Bogot&aacute;:
-        </p>
-        <div class="dim-list">
-          <a href="#" class="dim-arrow disabled">1. Ser joven <span class="badge-prox">pr&oacute;ximamente</span></a>
-          <a href="#" class="dim-arrow disabled">2. Educaci&oacute;n <span class="badge-prox">pr&oacute;ximamente</span></a>
-          <a href="dimension3.html" class="dim-arrow">3. Inclusi&oacute;n Productiva</a>
-          <a href="#" class="dim-arrow disabled">4. Salud Integral y<br>Autocuidado <span class="badge-prox">pr&oacute;ximamente</span></a>
-          <a href="#" class="dim-arrow disabled">5. Cultura, Recreaci&oacute;n y<br>Deporte <span class="badge-prox">pr&oacute;ximamente</span></a>
-          <a href="#" class="dim-arrow disabled">6. Paz, Convivencia y<br>Justicia <span class="badge-prox">pr&oacute;ximamente</span></a>
-          <a href="#" class="dim-arrow disabled">7. H&aacute;bitat <span class="badge-prox">pr&oacute;ximamente</span></a>
+  <div class="main-content">
+    <div class="left">
+      <h1 class="titulo">Centro de<br>Informaci&oacute;n<br>de Juventud</h1>
+
+      <div class="stats-section">
+        <h2>En Bogot&aacute; contamos con:</h2>
+        <div class="stats-cards">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <!-- Icono persona joven -->
+              <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="16" r="10"/>
+                <path d="M16 58c0-12 7-20 16-20s16 8 16 20z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="stat-number">1.706.136</div>
+              <div class="stat-label">J&oacute;venes</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <!-- Icono grupo de personas -->
+              <svg viewBox="0 0 80 64" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="12" r="8"/>
+                <path d="M28 56c0-10 5-16 12-16s12 6 12 16z"/>
+                <circle cx="20" cy="18" r="6"/>
+                <path d="M12 56c0-8 4-13 8-13s8 5 8 13z"/>
+                <circle cx="60" cy="18" r="6"/>
+                <path d="M52 56c0-8 4-13 8-13s8 5 8 13z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="stat-number">24,15 %</div>
+              <div class="stat-label">de la poblaci&oacute;n</div>
+            </div>
+          </div>
         </div>
+
+      </div>
+    </div>
+
+    <div class="right">
+      <p class="dim-intro">
+        Te invitamos a conocer m&aacute;s <strong>informaci&oacute;n en cada dimensi&oacute;n</strong> de la<br>
+        <strong>Pol&iacute;tica P&uacute;blica Distrital de Juventud</strong> de Bogot&aacute;:
+      </p>
+      <div class="dim-list">
+        <a href="#" class="dim-arrow">1. Ser joven</a>
+        <a href="#" class="dim-arrow">2. Educaci&oacute;n</a>
+        <a href="dimension3.html" class="dim-arrow">3. Inclusi&oacute;n Productiva</a>
+        <a href="#" class="dim-arrow">4. Salud Integral y Autocuidado</a>
+        <a href="#" class="dim-arrow">5. Cultura, Recreaci&oacute;n y Deporte</a>
+        <a href="#" class="dim-arrow">6. Paz, Convivencia y Justicia</a>
+        <a href="#" class="dim-arrow">7. H&aacute;bitat</a>
       </div>
     </div>
   </div>
+
 
 </body>
 </html>
