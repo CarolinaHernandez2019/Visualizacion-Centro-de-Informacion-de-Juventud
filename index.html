@@ -135,9 +135,9 @@
       border: 2px solid var(--naranja);
       border-radius: 8px;
       padding: 8px 12px;
-      margin: 0 auto;
       display: inline-block;
-      min-width: 150px;
+      min-width: 130px;
+      text-align: center;
     }
     .nodo-label {
       font-size: 0.7rem;
@@ -153,51 +153,31 @@
     .nodo-valor.naranja { color: var(--naranja); }
     .nodo-valor.verde { color: var(--verde); }
 
-    .arbol-nivel {
+    /* Línea vertical entre niveles */
+    .linea-v {
+      width: 2px;
+      height: 16px;
+      background: var(--naranja-claro);
+      margin: 0 auto;
+    }
+    /* Línea horizontal que conecta dos ramas */
+    .linea-h {
+      height: 2px;
+      background: var(--naranja-claro);
+      margin: 0 auto;
+    }
+    /* Fila de dos nodos lado a lado */
+    .arbol-fila {
       display: flex;
       justify-content: center;
-      gap: 1rem;
-      margin-top: 0.8rem;
+      align-items: flex-start;
+      gap: 0;
     }
-    .conector-h {
+    .arbol-rama {
       display: flex;
-      gap: 1rem;
-      position: relative;
-    }
-    .conector-h::before {
-      content: '';
-      position: absolute;
-      top: -0.8rem;
-      left: 25%;
-      right: 25%;
-      border-top: 2px solid var(--naranja-claro);
-    }
-    .nodo-wrap { position: relative; }
-    .nodo-wrap::before {
-      content: '';
-      position: absolute;
-      top: -0.8rem;
-      left: 50%;
-      height: 0.8rem;
-      border-left: 2px solid var(--naranja-claro);
-    }
-    .arbol-sub {
-      margin-top: 0.6rem;
-      margin-left: 30px;
-      border-left: 2px solid var(--naranja-claro);
-      padding-left: 0;
-    }
-    .arbol-sub .nodo-hijo {
-      position: relative;
-      padding: 0.4rem 0 0.4rem 18px;
-    }
-    .arbol-sub .nodo-hijo::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 18px;
-      border-top: 2px solid var(--naranja-claro);
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
     }
 
     /* Tasas */
@@ -351,37 +331,46 @@
             <div class="trim-actual" id="lbl-trim">Oct - Dic 25</div>
           </div>
           <div class="arbol">
+            <!-- Nivel 1: PET -->
             <div class="nodo">
               <div class="nodo-label">Jóvenes en edad de trabajar</div>
               <div class="nodo-valor naranja" id="v-pet">1.662</div>
             </div>
-            <div class="arbol-nivel">
-              <div class="conector-h">
-                <div class="nodo-wrap">
-                  <div class="nodo">
-                    <div class="nodo-label">Fuerza laboral joven</div>
-                    <div class="nodo-valor" id="v-ft">1.025</div>
-                  </div>
-                  <div class="arbol-sub">
-                    <div class="nodo-hijo">
-                      <div class="nodo">
-                        <div class="nodo-label">Jóvenes ocupados</div>
-                        <div class="nodo-valor verde" id="v-ocup">912</div>
-                      </div>
+            <div class="linea-v"></div>
+            <!-- Nivel 2: Fuerza laboral + Fuera -->
+            <div class="linea-h" style="width:50%;"></div>
+            <div class="arbol-fila">
+              <div class="arbol-rama">
+                <div class="linea-v"></div>
+                <div class="nodo">
+                  <div class="nodo-label">Fuerza laboral joven</div>
+                  <div class="nodo-valor" id="v-ft">1.025</div>
+                </div>
+                <div class="linea-v"></div>
+                <!-- Nivel 3: Ocupados + Desocupados -->
+                <div class="linea-h" style="width:70%;"></div>
+                <div class="arbol-fila">
+                  <div class="arbol-rama">
+                    <div class="linea-v"></div>
+                    <div class="nodo">
+                      <div class="nodo-label">Jóvenes ocupados</div>
+                      <div class="nodo-valor verde" id="v-ocup">912</div>
                     </div>
-                    <div class="nodo-hijo">
-                      <div class="nodo">
-                        <div class="nodo-label">Jóvenes desocupados</div>
-                        <div class="nodo-valor" id="v-desoc">113</div>
-                      </div>
+                  </div>
+                  <div class="arbol-rama">
+                    <div class="linea-v"></div>
+                    <div class="nodo">
+                      <div class="nodo-label">Jóvenes desocupados</div>
+                      <div class="nodo-valor" id="v-desoc">113</div>
                     </div>
                   </div>
                 </div>
-                <div class="nodo-wrap">
-                  <div class="nodo">
-                    <div class="nodo-label">Fuera de la fuerza laboral</div>
-                    <div class="nodo-valor naranja" id="v-fuera">637</div>
-                  </div>
+              </div>
+              <div class="arbol-rama">
+                <div class="linea-v"></div>
+                <div class="nodo">
+                  <div class="nodo-label">Fuera de la fuerza laboral</div>
+                  <div class="nodo-valor naranja" id="v-fuera">637</div>
                 </div>
               </div>
             </div>
