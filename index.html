@@ -3,21 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Centro de Información de Juventud - Dimensión 3: Inclusión Productiva</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <title>Centro de Información de Juventud – SDIS Bogotá</title>
   <style>
     :root {
+      --dorado: #c8a415;
+      --dorado-claro: #e8c840;
       --rojo-sdis: #c0392b;
-      --rojo-claro: #e74c3c;
-      --naranja: #e67e22;
-      --naranja-claro: #f39c12;
       --gris-oscuro: #2c3e50;
       --gris: #7f8c8d;
-      --gris-claro: #ecf0f1;
+      --gris-claro: #f5f5f5;
       --blanco: #ffffff;
-      --verde: #27ae60;
-      --azul: #2980b9;
-      --morado: #8e44ad;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,653 +24,182 @@
       line-height: 1.5;
     }
 
-    .header {
-      background: var(--rojo-sdis);
-      color: var(--blanco);
-      padding: 1.2rem 2rem;
+    /* Barra superior institucional */
+    .barra-top {
+      background: var(--blanco);
+      border-bottom: 4px solid var(--dorado);
+      padding: 0.8rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .barra-top .logos {
       display: flex;
       align-items: center;
       gap: 1rem;
     }
-    .header svg { width: 32px; height: 32px; fill: var(--blanco); }
-    .header h1 { font-size: 1.4rem; font-weight: 600; }
-
-    .container {
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
-
-    .page-subtitle {
-      font-size: 1.1rem;
-      color: var(--gris);
-      margin-bottom: 1rem;
-    }
-    .page-subtitle span { font-weight: 600; color: var(--gris-oscuro); }
-
-    /* Filtros */
-    .filtros {
-      background: var(--blanco);
-      border-radius: 10px;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .filtros label {
+    .barra-top .logo-text {
       font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--gris);
+      line-height: 1.3;
+      color: var(--gris-oscuro);
+    }
+    .barra-top .logo-text strong {
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .filtro-grupo { display: flex; align-items: center; gap: 0.5rem; }
-    .anio-btns { display: flex; gap: 4px; flex-wrap: wrap; }
-    .anio-btn {
-      padding: 6px 14px;
-      border: 2px solid var(--gris-claro);
-      background: var(--blanco);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
+    .barra-top .bogota {
+      font-size: 1.4rem;
+      font-weight: 800;
       color: var(--gris-oscuro);
-      transition: all 0.15s;
+      letter-spacing: 1px;
     }
-    .anio-btn:hover { border-color: var(--rojo-sdis); color: var(--rojo-sdis); }
-    .anio-btn.activo {
-      background: var(--gris-oscuro);
-      color: var(--blanco);
-      border-color: var(--gris-oscuro);
-    }
-    .trim-select {
-      padding: 6px 12px;
-      border: 2px solid var(--gris-claro);
-      border-radius: 6px;
-      font-size: 0.9rem;
-      color: var(--gris-oscuro);
-      background: var(--blanco);
-      cursor: pointer;
-      min-width: 200px;
-    }
-    .trim-select:focus { outline: none; border-color: var(--rojo-sdis); }
-
-    /* Grid */
-    .grid {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
-
-    .card {
-      background: var(--blanco);
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .card-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--gris);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--gris-claro);
+    .barra-top .separator {
+      width: 2px;
+      height: 35px;
+      background: var(--gris);
+      margin: 0 0.5rem;
     }
 
-    /* Árbol SVG */
-    .arbol-svg {
-      width: 100%;
-      max-width: 340px;
+    /* Contenido principal */
+    .main {
+      max-width: 1100px;
       margin: 0 auto;
-    }
-    .arbol-svg text.nodo-label {
-      font-size: 8px;
-      fill: var(--gris);
-      font-weight: 600;
-      text-transform: uppercase;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-    }
-    .arbol-svg text.nodo-valor {
-      font-size: 18px;
-      font-weight: 700;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-    }
-
-    /* Tasas */
-    .tasas-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.8rem;
-      margin-top: 0.5rem;
-    }
-    .tasa-card {
-      border: 2px solid var(--gris-claro);
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
-    }
-    .tasa-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--gris);
-      text-transform: uppercase;
-    }
-    .tasa-valor { font-size: 1.4rem; font-weight: 700; }
-    .tasa-valor.tgp { color: var(--verde); }
-    .tasa-valor.to { color: var(--naranja-claro); }
-    .tasa-valor.td { color: var(--rojo-sdis); }
-
-    .trim-actual {
-      background: var(--rojo-sdis);
-      color: var(--blanco);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Charts */
-    .chart-container { position: relative; height: 340px; }
-    .grid-2col {
+      padding: 2rem 1.5rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
+      gap: 3rem;
+      align-items: center;
+      min-height: calc(100vh - 80px);
     }
-    @media (max-width: 960px) { .grid-2col { grid-template-columns: 1fr; } }
+    @media (max-width: 800px) {
+      .main { grid-template-columns: 1fr; gap: 2rem; }
+    }
 
-    /* Tabla comparativa */
-    .tabla-comp {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-    .tabla-comp th {
-      background: var(--gris-oscuro);
-      color: var(--blanco);
-      padding: 8px 12px;
+    /* Lado izquierdo - Título */
+    .titulo-box {
+      border: 2px dashed var(--gris);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
       text-align: left;
-      font-weight: 600;
-      font-size: 0.8rem;
     }
-    .tabla-comp td {
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--gris-claro);
-    }
-    .tabla-comp tr:hover { background: #f8f9fa; }
-    .tabla-comp tr.fila-bogota {
-      background: #fef5e7;
-      font-weight: 600;
-    }
-    .tabla-comp tr.fila-bogota:hover { background: #fdf0d5; }
-    .tabla-comp .num { text-align: right; font-variant-numeric: tabular-nums; }
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    .badge-up { background: #d5f5e3; color: #1e8449; }
-    .badge-down { background: #fadbd8; color: #c0392b; }
-
-    .section-title {
-      font-size: 1.15rem;
+    .titulo-box h1 {
+      font-size: 3rem;
       font-weight: 700;
-      color: var(--gris-oscuro);
-      margin: 2rem 0 1rem;
-      padding-left: 12px;
-      border-left: 4px solid var(--rojo-sdis);
+      color: var(--dorado);
+      line-height: 1.15;
+    }
+    @media (max-width: 600px) {
+      .titulo-box h1 { font-size: 2rem; }
     }
 
+    /* Lado derecho - Dimensiones */
+    .dimensiones {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .dimensiones p {
+      font-size: 0.95rem;
+      color: var(--gris-oscuro);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .dimensiones p strong { font-weight: 700; }
+
+    .dim-link {
+      display: block;
+      text-decoration: none;
+      color: var(--blanco);
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem 0.75rem 2rem;
+      position: relative;
+      margin-bottom: 4px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      /* Forma de flecha con clip-path */
+      clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%, 5% 50%);
+      padding-left: 2.5rem;
+    }
+    .dim-link:first-of-type {
+      clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+      padding-left: 1.5rem;
+    }
+    .dim-link:hover {
+      transform: translateX(6px);
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Colores de cada dimensión */
+    .dim-1 { background: #c8a415; }
+    .dim-2 { background: #d4a017; }
+    .dim-3 { background: #b8860b; }
+    .dim-4 { background: #c0392b; }
+    .dim-5 { background: #a93226; }
+    .dim-6 { background: #922b21; }
+    .dim-7 { background: #7d6608; }
+
+    .dim-link.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .badge-soon {
+      font-size: 0.65rem;
+      background: rgba(255,255,255,0.3);
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: 8px;
+      font-weight: 400;
+      vertical-align: middle;
+    }
+
+    /* Footer */
     .footer {
-      margin-top: 1.5rem;
-      padding: 1rem 1.5rem;
+      text-align: center;
+      padding: 1rem;
       font-size: 0.8rem;
       color: var(--gris);
     }
-    .footer-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 0.8rem;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid var(--gris-claro);
-    }
-    .footer-notas {
-      background: #f8f9fa;
-      border-radius: 6px;
-      padding: 0.8rem 1rem;
-      font-size: 0.72rem;
-      line-height: 1.6;
-      color: #666;
-    }
-    .footer-notas p { margin-bottom: 0.3rem; }
-    .footer-notas p:last-child { margin-bottom: 0; }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
-    <h1>Dimensión 3 – Inclusión productiva</h1>
-  </div>
-
-  <div class="container">
-    <p class="page-subtitle">
-      <span>3.1 Panorama laboral de los jóvenes de Bogotá</span><br>
-      Fuente: DANE, GEIH Mercado laboral de la juventud
-    </p>
-
-    <!-- Filtros -->
-    <div class="filtros">
-      <div class="filtro-grupo">
-        <label>Año</label>
-        <div class="anio-btns" id="anio-btns"></div>
+  <div class="barra-top">
+    <div class="logos">
+      <div class="logo-text">
+        <strong>Secretar&iacute;a de</strong><br>
+        <strong>Integraci&oacute;n Social</strong>
       </div>
-      <div class="filtro-grupo">
-        <label>Trimestre</label>
-        <select class="trim-select" id="trim-select"></select>
-      </div>
-    </div>
-
-    <!-- Fila 1: Árbol + Gráfico serie histórica -->
-    <div class="grid">
-      <div>
-        <div class="card">
-          <div class="card-title">
-            Cifras mercado laboral – <span id="lbl-anio">2025</span>
-            <div class="trim-actual" id="lbl-trim">Oct - Dic 25</div>
-          </div>
-          <svg class="arbol-svg" viewBox="0 0 340 235" xmlns="http://www.w3.org/2000/svg">
-            <!-- Líneas de conexión -->
-            <g stroke="#f39c12" stroke-width="2" fill="none">
-              <!-- PET hacia abajo -->
-              <line x1="170" y1="52" x2="170" y2="72"/>
-              <!-- Horizontal nivel 2 -->
-              <line x1="95" y1="72" x2="260" y2="72"/>
-              <!-- Bajada a Fuerza laboral -->
-              <line x1="95" y1="72" x2="95" y2="82"/>
-              <!-- Bajada a Fuera FT -->
-              <line x1="260" y1="72" x2="260" y2="82"/>
-              <!-- Fuerza laboral hacia abajo -->
-              <line x1="95" y1="142" x2="95" y2="162"/>
-              <!-- Horizontal nivel 3 -->
-              <line x1="48" y1="162" x2="142" y2="162"/>
-              <!-- Bajada a Ocupados -->
-              <line x1="48" y1="162" x2="48" y2="172"/>
-              <!-- Bajada a Desocupados -->
-              <line x1="142" y1="162" x2="142" y2="172"/>
-            </g>
-            <!-- Nodo PET -->
-            <rect x="55" y="2" width="230" height="50" rx="8" fill="white" stroke="#e67e22" stroke-width="2"/>
-            <text x="170" y="18" text-anchor="middle" class="nodo-label">Jóvenes en edad de trabajar</text>
-            <text x="170" y="42" text-anchor="middle" class="nodo-valor" fill="#e67e22" id="v-pet">1.662</text>
-            <!-- Nodo Fuerza laboral -->
-            <rect x="10" y="82" width="170" height="60" rx="8" fill="white" stroke="#e67e22" stroke-width="2"/>
-            <text x="95" y="102" text-anchor="middle" class="nodo-label">Fuerza laboral joven</text>
-            <text x="95" y="130" text-anchor="middle" class="nodo-valor" fill="#c0392b" id="v-ft">1.025</text>
-            <!-- Nodo Fuera FT -->
-            <rect x="190" y="82" width="140" height="60" rx="8" fill="white" stroke="#e67e22" stroke-width="2"/>
-            <text x="260" y="102" text-anchor="middle" class="nodo-label">Fuera de la fuerza</text>
-            <text x="260" y="113" text-anchor="middle" class="nodo-label">laboral</text>
-            <text x="260" y="134" text-anchor="middle" class="nodo-valor" fill="#e67e22" id="v-fuera">637</text>
-            <!-- Nodo Ocupados -->
-            <rect x="2" y="172" width="92" height="55" rx="8" fill="white" stroke="#e67e22" stroke-width="2"/>
-            <text x="48" y="190" text-anchor="middle" class="nodo-label">Jóvenes</text>
-            <text x="48" y="200" text-anchor="middle" class="nodo-label">ocupados</text>
-            <text x="48" y="221" text-anchor="middle" class="nodo-valor" fill="#27ae60" id="v-ocup">912</text>
-            <!-- Nodo Desocupados -->
-            <rect x="100" y="172" width="92" height="55" rx="8" fill="white" stroke="#e67e22" stroke-width="2"/>
-            <text x="146" y="190" text-anchor="middle" class="nodo-label">Jóvenes</text>
-            <text x="146" y="200" text-anchor="middle" class="nodo-label">desocupados</text>
-            <text x="146" y="221" text-anchor="middle" class="nodo-valor" fill="#c0392b" id="v-desoc">113</text>
-          </svg>
-          <div class="tasas-grid">
-            <div class="tasa-card">
-              <div class="tasa-label">Tasa global de participación (TGP)</div>
-              <div class="tasa-valor tgp" id="v-tgp">61,7</div>
-            </div>
-            <div class="tasa-card">
-              <div class="tasa-label">Tasa de ocupación (TO)</div>
-              <div class="tasa-valor to" id="v-to">54,9</div>
-            </div>
-            <div class="tasa-card">
-              <div class="tasa-label">Tasa de desocupación (TD)</div>
-              <div class="tasa-valor td" id="v-td">11,1</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          TGP, TO y TD Bogotá – Serie histórica <span id="lbl-trim-chart"></span>
-        </div>
-        <div class="chart-container">
-          <canvas id="chart-tasas"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sección comparativa -->
-    <h2 class="section-title">Comparación: Bogotá vs Total 13 ciudades vs Total nacional</h2>
-
-    <!-- Fila 2: Gráficos comparativos de líneas -->
-    <div class="grid-2col">
-      <div class="card">
-        <div class="card-title">Tasa de desocupación (TD) – Serie histórica <span id="lbl-trim-td"></span></div>
-        <div class="chart-container">
-          <canvas id="chart-td-ciudades"></canvas>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Tasa de ocupación (TO) – Serie histórica <span id="lbl-trim-to"></span></div>
-        <div class="chart-container">
-          <canvas id="chart-to-ciudades"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tabla comparativa -->
-    <div class="card" style="margin-bottom:1.5rem;">
-      <div class="card-title">Indicadores comparados – <span id="lbl-trim-tabla"></span></div>
-      <div style="overflow-x:auto;">
-        <table class="tabla-comp" id="tabla-ciudades">
-          <thead>
-            <tr>
-              <th></th>
-              <th class="num">PET joven (miles)</th>
-              <th class="num">TGP (%)</th>
-              <th class="num">TO (%)</th>
-              <th class="num">TD (%)</th>
-              <th class="num">% Fuera FT</th>
-              <th class="num">Ocupados (miles)</th>
-              <th class="num">Desocupados (miles)</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="footer">
-      <div class="footer-top">
-        <div>
-          Fuente: Anexo Mercado laboral de la juventud, Gran Encuesta Integrada de Hogares GEIH – DANE<br>
-          Cifras en miles de personas. Datos para población de 15 a 28 años.
-        </div>
-        <div style="text-align:right;">
-          Secretaría de Integración Social<br>
-          Subdirección para la Juventud – Centro de Información de Juventud
-        </div>
-      </div>
-      <div class="footer-notas">
-        <p><strong>Total nacional:</strong> excluye de la cobertura de los departamentos de la Amazonía y Orinoquía las cabeceras municipales que no son capitales de departamento, así como los centros poblados y rural disperso. También se excluye la población de Providencia y el centro poblado y rural disperso de San Andrés.</p>
-        <p><strong>13 ciudades y áreas metropolitanas:</strong> Bogotá D.C., Medellín A.M., Cali A.M., Barranquilla A.M., Bucaramanga A.M., Manizales A.M., Pereira A.M., Cúcuta A.M., Pasto, Ibagué, Montería, Cartagena y Villavicencio.</p>
-      </div>
+      <div class="separator"></div>
+      <div class="bogota">BOGOT&Aacute;</div>
     </div>
   </div>
 
-<script>
-// Formato colombiano
-function fmtMiles(n) {
-  if (n == null) return '–';
-  return Math.round(n).toLocaleString('es-CO');
-}
-function fmtDec(n, d=1) {
-  if (n == null) return '–';
-  return n.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d });
-}
+  <div class="main">
+    <div>
+      <div class="titulo-box">
+        <h1>Centro de<br>Informaci&oacute;n<br>de Juventud</h1>
+      </div>
+    </div>
 
-let BOGOTA = [];
-let CIUDADES = {};
-let anioActual = 2025;
-let trimActual = '';
-let chartTasas = null;
-let chartTD = null;
-let chartTO = null;
+    <div class="dimensiones">
+      <p>Te invitamos a conocer <strong>informaci&oacute;n en cada dimensi&oacute;n</strong> de la <strong>pol&iacute;tica p&uacute;blica de juventud</strong> de Bogot&aacute; D.C.:</p>
 
-const COMPARAR = ['Bogotá D.C.', 'Total 13 ciudades', 'Total nacional'];
+      <a href="#" class="dim-link dim-1 disabled">1. Ser joven <span class="badge-soon">pr&oacute;ximamente</span></a>
+      <a href="#" class="dim-link dim-2 disabled">2. Educaci&oacute;n <span class="badge-soon">pr&oacute;ximamente</span></a>
+      <a href="dimension3.html" class="dim-link dim-3">3. Inclusi&oacute;n Productiva</a>
+      <a href="#" class="dim-link dim-4 disabled">4. Salud Integral y Autocuidado <span class="badge-soon">pr&oacute;ximamente</span></a>
+      <a href="#" class="dim-link dim-5 disabled">5. Cultura, Recreaci&oacute;n y Deporte <span class="badge-soon">pr&oacute;ximamente</span></a>
+      <a href="#" class="dim-link dim-6 disabled">6. Paz, Convivencia y Justicia <span class="badge-soon">pr&oacute;ximamente</span></a>
+      <a href="#" class="dim-link dim-7 disabled">7. H&aacute;bitat <span class="badge-soon">pr&oacute;ximamente</span></a>
+    </div>
+  </div>
 
-const COLORES = {
-  'Bogotá D.C.': '#c0392b',
-  'Total nacional': '#2c3e50',
-  'Total 13 ciudades': '#7f8c8d',
-};
-
-const NOMBRES_CORTOS = {
-  'Bogotá D.C.': 'Bogotá',
-  'Total nacional': 'Nacional',
-  'Total 13 ciudades': '13 ciudades',
-};
-
-// Cargar datos
-Promise.all([
-  fetch('data/mercado_laboral.json').then(r => r.json()),
-  fetch('data/mercado_laboral_ciudades.json').then(r => r.json())
-]).then(([bogota, ciudades]) => {
-  BOGOTA = bogota.filter(d => d.anio >= 2018);
-  CIUDADES = ciudades;
-  initFiltros();
-  actualizarTodo();
-});
-
-function initFiltros() {
-  const anios = [...new Set(BOGOTA.map(d => d.anio))].sort();
-  const btnContainer = document.getElementById('anio-btns');
-  anios.forEach(a => {
-    const btn = document.createElement('button');
-    btn.className = 'anio-btn' + (a === anioActual ? ' activo' : '');
-    btn.textContent = a;
-    btn.onclick = () => {
-      anioActual = a;
-      document.querySelectorAll('.anio-btn').forEach(b => b.classList.remove('activo'));
-      btn.classList.add('activo');
-      actualizarTrimestres();
-      actualizarTodo();
-    };
-    btnContainer.appendChild(btn);
-  });
-  actualizarTrimestres();
-  document.getElementById('trim-select').onchange = function() {
-    trimActual = this.value;
-    actualizarTodo();
-  };
-}
-
-// Solo trimestres fijos (no móviles)
-const TRIM_FIJOS = ['Ene - Mar', 'Abr - Jun', 'Jul - Sep', 'Oct - Dic'];
-
-function actualizarTrimestres() {
-  const select = document.getElementById('trim-select');
-  // Filtrar solo los trimestres fijos disponibles para el año seleccionado
-  const trimestres = BOGOTA
-    .filter(d => d.anio === anioActual)
-    .filter(d => TRIM_FIJOS.some(tf => getTrimBase(d.trimestre).startsWith(tf)))
-    .map(d => d.trimestre);
-  select.innerHTML = '';
-  trimestres.forEach(t => {
-    const opt = document.createElement('option');
-    opt.value = t; opt.textContent = t;
-    select.appendChild(opt);
-  });
-  if (trimestres.length > 0) {
-    trimActual = trimestres[trimestres.length - 1];
-    select.value = trimActual;
-  }
-}
-
-function getTrimBase(trim) {
-  return trim.replace(/\s*\d{2}$/, '').trim();
-}
-
-function actualizarTodo() {
-  actualizarCifras();
-  actualizarGraficoBogota();
-  actualizarGraficosCiudades();
-  actualizarTabla();
-}
-
-function actualizarCifras() {
-  const d = BOGOTA.find(d => d.anio === anioActual && d.trimestre === trimActual);
-  if (!d) return;
-  document.getElementById('lbl-anio').textContent = d.anio;
-  document.getElementById('lbl-trim').textContent = d.trimestre;
-  document.getElementById('v-pet').textContent = fmtMiles(d.pet_15_28);
-  document.getElementById('v-ft').textContent = fmtMiles(d.fuerza_trabajo);
-  document.getElementById('v-ocup').textContent = fmtMiles(d.ocupados);
-  document.getElementById('v-desoc').textContent = fmtMiles(d.desocupados);
-  document.getElementById('v-fuera').textContent = fmtMiles(d.fuera_ft);
-  document.getElementById('v-tgp').textContent = fmtDec(d.tgp);
-  document.getElementById('v-to').textContent = fmtDec(d.to);
-  document.getElementById('v-td').textContent = fmtDec(d.td);
-}
-
-function actualizarGraficoBogota() {
-  const trimBase = getTrimBase(trimActual);
-  const serie = BOGOTA.filter(d => getTrimBase(d.trimestre) === trimBase)
-    .sort((a, b) => a.anio - b.anio);
-
-  document.getElementById('lbl-trim-chart').textContent =
-    serie.length > 0 ? `(${trimBase})` : '';
-
-  if (chartTasas) chartTasas.destroy();
-  chartTasas = new Chart(document.getElementById('chart-tasas'), {
-    type: 'line',
-    data: {
-      labels: serie.map(d => d.anio),
-      datasets: [
-        { label: 'TGP', data: serie.map(d => d.tgp), borderColor: '#27ae60', backgroundColor: '#27ae60', borderWidth: 2.5, pointRadius: 4, tension: 0.3 },
-        { label: 'TO', data: serie.map(d => d.to), borderColor: '#f39c12', backgroundColor: '#f39c12', borderWidth: 2.5, pointRadius: 4, tension: 0.3 },
-        { label: 'TD', data: serie.map(d => d.td), borderColor: '#c0392b', backgroundColor: '#c0392b', borderWidth: 2.5, pointRadius: 4, tension: 0.3 },
-      ]
-    },
-    options: chartOpts()
-  });
-}
-
-function actualizarGraficosCiudades() {
-  const trimBase = getTrimBase(trimActual);
-  const trimLabel = `(${trimBase})`;
-  document.getElementById('lbl-trim-td').textContent = trimLabel;
-  document.getElementById('lbl-trim-to').textContent = trimLabel;
-
-  // Construir series históricas para cada entidad comparada
-  function buildSeries(prop) {
-    const datasets = [];
-    COMPARAR.forEach(city => {
-      const datos = CIUDADES[city];
-      if (!datos) return;
-      const serie = datos.filter(d => getTrimBase(d.trimestre) === trimBase)
-        .sort((a, b) => a.anio - b.anio);
-      const dashes = city === 'Total 13 ciudades' ? [6, 4] : city === 'Total nacional' ? [2, 3] : [];
-      datasets.push({
-        label: NOMBRES_CORTOS[city] || city,
-        data: serie.map(d => d[prop]),
-        borderColor: COLORES[city],
-        backgroundColor: COLORES[city],
-        borderWidth: city === 'Bogotá D.C.' ? 3 : 2,
-        borderDash: dashes,
-        pointRadius: city === 'Bogotá D.C.' ? 5 : 3,
-        pointHoverRadius: 6,
-        tension: 0.3,
-      });
-    });
-    // Los labels salen de Bogotá (todos tienen los mismos años)
-    const bogData = CIUDADES['Bogotá D.C.'] || [];
-    const labels = bogData.filter(d => getTrimBase(d.trimestre) === trimBase)
-      .sort((a, b) => a.anio - b.anio).map(d => d.anio);
-    return { labels, datasets };
-  }
-
-  // Gráfico TD comparativo
-  if (chartTD) chartTD.destroy();
-  const tdSeries = buildSeries('td');
-  chartTD = new Chart(document.getElementById('chart-td-ciudades'), {
-    type: 'line',
-    data: tdSeries,
-    options: chartOpts()
-  });
-
-  // Gráfico TO comparativo
-  if (chartTO) chartTO.destroy();
-  const toSeries = buildSeries('to');
-  chartTO = new Chart(document.getElementById('chart-to-ciudades'), {
-    type: 'line',
-    data: toSeries,
-    options: chartOpts()
-  });
-}
-
-function actualizarTabla() {
-  const trimBase = getTrimBase(trimActual);
-  const trimLabel = `${trimBase} ${anioActual}`;
-  document.getElementById('lbl-trim-tabla').textContent = trimLabel;
-
-  const tbody = document.getElementById('tabla-body');
-  tbody.innerHTML = '';
-
-  const orden = ['Total nacional', 'Total 13 ciudades', 'Bogotá D.C.'];
-
-  orden.forEach(city => {
-    const datos = CIUDADES[city];
-    if (!datos) return;
-    const d = datos.find(r => r.anio === anioActual && getTrimBase(r.trimestre) === trimBase);
-    if (!d) return;
-
-    const isBogota = city === 'Bogotá D.C.';
-    const nombre = NOMBRES_CORTOS[city] || city;
-
-    const tr = document.createElement('tr');
-    if (isBogota) tr.className = 'fila-bogota';
-    tr.innerHTML = `
-      <td>${isBogota ? '🔸 ' : ''}${nombre}</td>
-      <td class="num">${fmtMiles(d.pet_15_28)}</td>
-      <td class="num">${fmtDec(d.tgp)}</td>
-      <td class="num">${fmtDec(d.to)}</td>
-      <td class="num">${fmtDec(d.td)}</td>
-      <td class="num">${fmtDec(d.pct_fuera_ft)}</td>
-      <td class="num">${fmtMiles(d.ocupados)}</td>
-      <td class="num">${fmtMiles(d.desocupados)}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function chartOpts() {
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: { intersect: false, mode: 'index' },
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: { usePointStyle: true, pointStyle: 'circle', padding: 15, font: { size: 11 } }
-      },
-      tooltip: {
-        callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtDec(ctx.parsed.y) + '%' }
-      }
-    },
-    scales: {
-      y: { ticks: { callback: v => fmtDec(v) + '%', font: { size: 11 } }, grid: { color: '#ecf0f1' } },
-      x: { ticks: { font: { size: 11 } }, grid: { display: false } }
-    }
-  };
-}
-
-</script>
+  <div class="footer">
+    Subdirecci&oacute;n para la Juventud – Centro de Informaci&oacute;n de Juventud · SDIS Bogot&aacute;
+  </div>
 
 </body>
 </html>

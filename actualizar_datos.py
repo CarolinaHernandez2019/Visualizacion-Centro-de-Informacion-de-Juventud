@@ -7,18 +7,13 @@
 #      https://www.dane.gov.co/index.php/estadisticas-por-tema/mercado-laboral/mercado-laboral-de-la-juventud
 #      (archivo tipo "anex-GEIHMLJ-xxx-xxx20XX.xlsx")
 #
-#   2. Guardar el archivo en:
-#      240708_Fuentes/Actualizacion 2026/Mercado laboral/
+#   2. Guardar el archivo en la carpeta fuentes/ de este proyecto
 #
-#   3. Correr este script desde la carpeta tablero-cij:
+#   3. Correr este script:
 #      python actualizar_datos.py
 #
-#   4. Verificar en http://localhost:8080 (python -m http.server 8080)
-#
-#   5. Si todo se ve bien, hacer push a GitHub:
-#      git add data/
-#      git commit -m "Actualizar datos mercado laboral [trimestre]"
-#      git push
+#   4. Los archivos JSON en data/ se actualizan automáticamente.
+#      Si se sube a GitHub, el tablero se actualiza solo (GitHub Actions).
 
 import os
 import re
@@ -26,22 +21,14 @@ import json
 import openpyxl
 
 # ============================================================
-# Configuración - ajustar si cambian las rutas
+# Configuración
 # ============================================================
 
 # Carpeta raíz del proyecto
 TABLERO_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Carpeta de fuentes del Power BI
-FUENTES_DIR = os.path.join(
-    os.path.dirname(TABLERO_DIR),
-    'Tableros power bi', 'Tableros',
-    'Visualización Centro de Información de Juventud',
-    '240708_Fuentes', 'Actualizacion 2026', 'Mercado laboral'
-)
-
-# Archivo de salida del Power BI (se actualiza también)
-PBI_FILE_NAME = 'Mercado laboral jóvenes.xlsx'
+# Carpeta de fuentes (dentro del repo)
+FUENTES_DIR = os.path.join(TABLERO_DIR, 'fuentes')
 
 # Carpeta de datos del tablero web
 DATA_DIR = os.path.join(TABLERO_DIR, 'data')
@@ -142,62 +129,6 @@ def extraer_ciudad(ws, start_row, anio_min=2014):
     return results
 
 
-def actualizar_pbi_excel(pbi_path, bogota_data):
-    """Actualiza el archivo Excel del Power BI con los datos nuevos de Bogotá."""
-    # Crear backup
-    backup_path = pbi_path.replace('.xlsx', '_backup.xlsx')
-    import shutil
-    shutil.copy2(pbi_path, backup_path)
-    print(f'  Backup creado: {os.path.basename(backup_path)}')
-
-    wb = openpyxl.load_workbook(pbi_path)
-    ws = wb['Mercado laboral']
-
-    # Leer encabezados existentes (fila 1)
-    headers = [ws.cell(row=1, column=c).value for c in range(1, 14)]
-
-    # Encontrar última fila con datos
-    last_row = 1
-    for row in ws.iter_rows(min_row=2, max_col=1, values_only=False):
-        if row[0].value is not None:
-            last_row = row[0].row
-
-    # Mapeo de columnas DANE → Excel
-    col_map = {
-        'anio': 0, 'trimestre': 1, 'pct_pet': 2, 'tgp': 3, 'to': 4,
-        'td': 5, 'pct_fuera_ft': 6, 'pet': 7, 'pet_15_28': 8,
-        'fuerza_trabajo': 9, 'ocupados': 10, 'desocupados': 11, 'fuera_ft': 12
-    }
-
-    # Leer datos existentes para detectar duplicados
-    existing = set()
-    for row in ws.iter_rows(min_row=2, max_row=last_row, max_col=2, values_only=True):
-        if row[0] and row[1]:
-            existing.add((row[0], normalizar_trimestre(str(row[1]))))
-
-    # Agregar datos nuevos
-    nuevos = 0
-    for d in bogota_data:
-        key = (d['anio'], d['trimestre'])
-        if key not in existing:
-            last_row += 1
-            vals = [d['anio'], d['trimestre'], d['pct_pet'], d['tgp'], d['to'],
-                    d['td'], d['pct_fuera_ft'],
-                    round(d['pet']) if d['pet'] else None,
-                    round(d['pet_15_28']) if d['pet_15_28'] else None,
-                    round(d['fuerza_trabajo']) if d['fuerza_trabajo'] else None,
-                    round(d['ocupados']) if d['ocupados'] else None,
-                    round(d['desocupados']) if d['desocupados'] else None,
-                    round(d['fuera_ft']) if d['fuera_ft'] else None]
-            for col_idx, val in enumerate(vals, 1):
-                ws.cell(row=last_row, column=col_idx, value=val)
-            nuevos += 1
-
-    wb.save(pbi_path)
-    wb.close()
-    print(f'  Excel PBI actualizado: {nuevos} trimestres nuevos agregados')
-
-
 def main():
     print('=' * 60)
     print('Actualización de datos - Mercado laboral juvenil')
@@ -246,16 +177,7 @@ def main():
         json.dump(ciudades_data, f, ensure_ascii=False, indent=2)
     print(f'  mercado_laboral_ciudades.json: {len(ciudades_data)} ciudades')
 
-    # 5. Actualizar Excel del Power BI
-    pbi_path = os.path.join(FUENTES_DIR, PBI_FILE_NAME)
-    if os.path.exists(pbi_path):
-        print(f'\nActualizando Excel Power BI: {PBI_FILE_NAME}')
-        actualizar_pbi_excel(pbi_path, bogota_data)
-    else:
-        print(f'\nNota: No se encontró {PBI_FILE_NAME} en la carpeta de fuentes.')
-        print('  El Excel del Power BI no se actualizó.')
-
-    # 6. Resumen
+    # 5. Resumen
     fijos = ['Ene - Mar', 'Abr - Jun', 'Jul - Sep', 'Oct - Dic']
     print('\n' + '=' * 60)
     print('RESUMEN')
@@ -272,15 +194,7 @@ def main():
     print(f'\nArchivos actualizados:')
     print(f'  - {bogota_path}')
     print(f'  - {ciudades_path}')
-    if os.path.exists(pbi_path):
-        print(f'  - {pbi_path}')
-
-    print(f'\nSiguientes pasos:')
-    print(f'  1. Verificar en http://localhost:8080')
-    print(f'     (correr: python -m http.server 8080)')
-    print(f'  2. git add data/')
-    print(f'     git commit -m "Actualizar datos mercado laboral"')
-    print(f'     git push')
+    print(f'\nEl tablero web se actualizará automáticamente al hacer push.')
 
 
 if __name__ == '__main__':

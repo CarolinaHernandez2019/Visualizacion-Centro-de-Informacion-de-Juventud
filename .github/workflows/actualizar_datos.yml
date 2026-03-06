@@ -1,0 +1,38 @@
+# Actualiza los JSONs del tablero automáticamente cuando se sube
+# un nuevo archivo Excel del DANE a la carpeta fuentes/
+name: Actualizar datos
+
+on:
+  push:
+    paths:
+      - 'fuentes/**'
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install openpyxl
+
+      - name: Ejecutar script de actualización
+        run: python actualizar_datos.py
+
+      - name: Verificar si hay cambios
+        id: check
+        run: |
+          git diff --quiet data/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit y push datos actualizados
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "Actualizar datos mercado laboral (automático)"
+          git push
