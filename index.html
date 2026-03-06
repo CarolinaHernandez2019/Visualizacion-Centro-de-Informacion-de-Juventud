@@ -181,38 +181,23 @@
       height: 0.8rem;
       border-left: 2px solid var(--naranja-claro);
     }
-    .arbol-sub { margin-top: 0.8rem; position: relative; padding-left: 20px; }
-    .arbol-sub::before {
-      content: '';
-      position: absolute;
-      top: -0.8rem;
-      left: 20px;
-      width: 2px;
-      bottom: 0;
-      background: var(--naranja-claro);
+    .arbol-sub {
+      margin-top: 0.6rem;
+      margin-left: 30px;
+      border-left: 2px solid var(--naranja-claro);
+      padding-left: 0;
     }
     .arbol-sub .nodo-hijo {
       position: relative;
-      margin-bottom: 0.6rem;
+      padding: 0.4rem 0 0.4rem 18px;
     }
     .arbol-sub .nodo-hijo::before {
       content: '';
       position: absolute;
       top: 50%;
-      left: -20px;
-      width: 20px;
+      left: 0;
+      width: 18px;
       border-top: 2px solid var(--naranja-claro);
-    }
-    .arbol-sub .nodo-hijo:last-child { margin-bottom: 0; }
-    /* Recortar la línea vertical para que no pase del último hijo */
-    .arbol-sub::after {
-      content: '';
-      position: absolute;
-      left: 20px;
-      bottom: 0;
-      width: 2px;
-      height: 50%;
-      background: var(--blanco);
     }
 
     /* Tasas */
