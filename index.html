@@ -181,14 +181,38 @@
       height: 0.8rem;
       border-left: 2px solid var(--naranja-claro);
     }
-    .arbol-sub { margin-top: 0.8rem; position: relative; }
+    .arbol-sub { margin-top: 0.8rem; position: relative; padding-left: 20px; }
     .arbol-sub::before {
       content: '';
       position: absolute;
       top: -0.8rem;
-      left: 50%;
-      height: 0.8rem;
-      border-left: 2px solid var(--naranja-claro);
+      left: 20px;
+      width: 2px;
+      bottom: 0;
+      background: var(--naranja-claro);
+    }
+    .arbol-sub .nodo-hijo {
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    .arbol-sub .nodo-hijo::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -20px;
+      width: 20px;
+      border-top: 2px solid var(--naranja-claro);
+    }
+    .arbol-sub .nodo-hijo:last-child { margin-bottom: 0; }
+    /* Recortar la línea vertical para que no pase del último hijo */
+    .arbol-sub::after {
+      content: '';
+      position: absolute;
+      left: 20px;
+      bottom: 0;
+      width: 2px;
+      height: 50%;
+      background: var(--blanco);
     }
 
     /* Tasas */
@@ -339,13 +363,17 @@
                     <div class="nodo-valor" id="v-ft">1.025</div>
                   </div>
                   <div class="arbol-sub">
-                    <div class="nodo" style="margin-bottom:0.6rem;">
-                      <div class="nodo-label">Jóvenes ocupados</div>
-                      <div class="nodo-valor verde" id="v-ocup">912</div>
+                    <div class="nodo-hijo">
+                      <div class="nodo">
+                        <div class="nodo-label">Jóvenes ocupados</div>
+                        <div class="nodo-valor verde" id="v-ocup">912</div>
+                      </div>
                     </div>
-                    <div class="nodo">
-                      <div class="nodo-label">Jóvenes desocupados</div>
-                      <div class="nodo-valor" id="v-desoc">113</div>
+                    <div class="nodo-hijo">
+                      <div class="nodo">
+                        <div class="nodo-label">Jóvenes desocupados</div>
+                        <div class="nodo-valor" id="v-desoc">113</div>
+                      </div>
                     </div>
                   </div>
                 </div>
