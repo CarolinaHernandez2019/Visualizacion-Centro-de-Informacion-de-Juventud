@@ -110,6 +110,12 @@ El tablero se actualiza automáticamente en GitHub Pages en unos minutos.
 - Total 13 ciudades
 - Total nacional
 
+### Notas metodológicas
+
+**Total nacional:** excluye de la cobertura de los departamentos de la Amazonía y Orinoquía las cabeceras municipales que no son capitales de departamento, así como los centros poblados y rural disperso. También se excluye la población de Providencia y el centro poblado y rural disperso de San Andrés.
+
+**13 ciudades y áreas metropolitanas:** Bogotá D.C., Medellín A.M., Cali A.M., Barranquilla A.M., Bucaramanga A.M., Manizales A.M., Pereira A.M., Cúcuta A.M., Pasto, Ibagué, Montería, Cartagena y Villavicencio.
+
 ---
 
 ## Notas para el analista nuevo
