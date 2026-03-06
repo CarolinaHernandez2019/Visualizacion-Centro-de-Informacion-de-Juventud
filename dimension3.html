@@ -38,7 +38,19 @@
       gap: 1rem;
     }
     .header svg { width: 32px; height: 32px; fill: var(--blanco); }
-    .header h1 { font-size: 1.4rem; font-weight: 600; }
+    .header h1 { font-size: 1.4rem; font-weight: 600; flex: 1; }
+    .header .btn-home {
+      color: var(--blanco);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 6px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .header .btn-home:hover { background: rgba(255,255,255,0.15); border-color: var(--blanco); }
 
     .container {
       max-width: 1320px;
@@ -270,6 +282,7 @@
   <div class="header">
     <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
     <h1>Dimensión 3 – Inclusión productiva</h1>
+    <a href="index.html" class="btn-home">&#8592; Inicio</a>
   </div>
 
   <div class="container">
