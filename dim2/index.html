@@ -283,11 +283,79 @@
       </div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- SECCIÓN 2.2: Educación Superior -->
+    <!-- ============================================================ -->
+    <hr style="border:none; border-top:3px solid var(--naranja-claro); margin:2.5rem 0 1.5rem;">
+
+    <p class="page-subtitle">
+      <span>2.2 Matrículas en educación superior</span><br>
+      Fuente: MEN – Estadísticas de matrícula por municipio (datos.gov.co)
+    </p>
+
+    <!-- Filtro educación superior -->
+    <div class="filtros">
+      <div class="filtro-grupo">
+        <label>Año</label>
+        <select class="filtro-select" id="filtro-anio-sup"></select>
+      </div>
+    </div>
+
+    <!-- KPIs educación superior -->
+    <div class="kpis-row">
+      <div class="kpi-group">
+        <div class="kpi-group-title">Matrículas en Bogotá</div>
+        <div class="kpi-cards">
+          <div class="kpi-card">
+            <div class="kpi-valor" id="kpi-total-bog">–</div>
+            <div class="kpi-label">Total Bogotá</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-valor" id="kpi-total-col">–</div>
+            <div class="kpi-label">Total Colombia</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-valor" id="kpi-pct-bog">–</div>
+            <div class="kpi-label">Participación Bogotá</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-valor" id="kpi-ies">–</div>
+            <div class="kpi-label">IES con oferta</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-group">
+        <div class="kpi-group-title">Matrículas por nivel de formación</div>
+        <div class="chart-container" style="height:180px;">
+          <canvas id="chart-niveles"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos educación superior -->
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-title">Histórico de matrículas en educación superior — Bogotá</div>
+        <div class="chart-container">
+          <canvas id="chart-historico-sup"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bogotá vs. Colombia — Total de matrículas</div>
+        <div class="chart-container">
+          <canvas id="chart-bogota-col"></canvas>
+        </div>
+      </div>
+    </div>
+
     <div class="footer">
       <div class="footer-top">
         <div>
           Fuente: Ministerio de Educación Nacional – MEN / Datos abiertos<br>
-          Indicadores de educación media por departamento, filtrados para Bogotá D.C.
+          2.1: Indicadores de educación media por departamento · 2.2: Matrículas en educación superior por municipio<br>
+          Datos filtrados para Bogotá D.C.
         </div>
         <div style="text-align:right;">
           Secretaría de Integración Social<br>
@@ -519,6 +587,250 @@ function actualizarChartDesercion() {
             callback: v => fmtDec(v, 0) + ' %',
             font: { size: 10 }
           },
+          grid: { color: '#ecf0f1' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// SECCIÓN 2.2: Educación Superior
+// ============================================================
+
+let DATOS_SUP = [];
+let chartNiveles = null;
+let chartHistoricoSup = null;
+let chartBogotaCol = null;
+
+// Formato para números grandes (matrículas)
+function fmtNum(n) {
+  if (n == null) return '–';
+  return Math.round(n).toLocaleString('es-CO');
+}
+
+fetch('data/educacion_superior.json')
+  .then(r => r.json())
+  .then(datos => {
+    DATOS_SUP = datos;
+    initFiltrosSup();
+    actualizarTodoSup();
+  });
+
+function initFiltrosSup() {
+  const sel = document.getElementById('filtro-anio-sup');
+  const anios = DATOS_SUP.map(d => d.anio).sort();
+  anios.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a; opt.textContent = a;
+    if (a === Math.max(...anios)) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.onchange = actualizarTodoSup;
+}
+
+function getAnioSup() {
+  return parseInt(document.getElementById('filtro-anio-sup').value);
+}
+
+function actualizarTodoSup() {
+  const anio = getAnioSup();
+  actualizarKPIsSup(anio);
+  actualizarChartNiveles(anio);
+  actualizarChartHistoricoSup();
+  actualizarChartBogotaCol();
+}
+
+function actualizarKPIsSup(anio) {
+  const d = DATOS_SUP.find(r => r.anio === anio);
+  if (!d) return;
+  document.getElementById('kpi-total-bog').textContent = fmtNum(d.total_bogota);
+  document.getElementById('kpi-total-col').textContent = fmtNum(d.total_colombia);
+  document.getElementById('kpi-pct-bog').textContent = d.pct_bogota != null ? fmtDec(d.pct_bogota, 1) + ' %' : '–';
+  document.getElementById('kpi-ies').textContent = d.ies_con_oferta || '–';
+}
+
+function actualizarChartNiveles(anio) {
+  const d = DATOS_SUP.find(r => r.anio === anio);
+  if (!d) return;
+
+  const niveles = [
+    { label: 'Universitaria', key: 'universitaria', color: '#c49518' },
+    { label: 'Tecnológica', key: 'tecnologica', color: '#e8b84a' },
+    { label: 'Especialización', key: 'especializacion', color: '#a07812' },
+    { label: 'Maestría', key: 'maestria', color: '#d4a94c' },
+    { label: 'Técnica profesional', key: 'tecnica_profesional', color: '#8b6914' },
+    { label: 'Doctorado', key: 'doctorado', color: '#f0d080' },
+  ];
+
+  if (chartNiveles) chartNiveles.destroy();
+  chartNiveles = new Chart(document.getElementById('chart-niveles'), {
+    type: 'bar',
+    data: {
+      labels: niveles.map(n => n.label),
+      datasets: [{
+        data: niveles.map(n => d[n.key] || 0),
+        backgroundColor: niveles.map(n => n.color),
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' matrículas' }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { callback: v => fmtNum(v), font: { size: 10 } },
+          grid: { color: '#ecf0f1' }
+        },
+        y: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function actualizarChartHistoricoSup() {
+  const datos = DATOS_SUP.sort((a, b) => a.anio - b.anio);
+
+  const niveles = [
+    { label: 'Universitaria', key: 'universitaria', color: '#c49518' },
+    { label: 'Tecnológica', key: 'tecnologica', color: '#e8b84a' },
+    { label: 'Técnica profesional', key: 'tecnica_profesional', color: '#8b6914' },
+    { label: 'Posgrado', key: null, color: '#c0392b' },
+  ];
+
+  if (chartHistoricoSup) chartHistoricoSup.destroy();
+  chartHistoricoSup = new Chart(document.getElementById('chart-historico-sup'), {
+    type: 'line',
+    data: {
+      labels: datos.map(d => d.anio),
+      datasets: [
+        {
+          label: 'Universitaria',
+          data: datos.map(d => d.universitaria),
+          borderColor: '#c49518',
+          backgroundColor: '#c49518',
+          borderWidth: 2.5,
+          pointRadius: 3,
+          tension: 0.3,
+        },
+        {
+          label: 'Tecnológica',
+          data: datos.map(d => d.tecnologica),
+          borderColor: '#e8b84a',
+          backgroundColor: '#e8b84a',
+          borderWidth: 2.5,
+          pointRadius: 3,
+          tension: 0.3,
+        },
+        {
+          label: 'Técnica profesional',
+          data: datos.map(d => d.tecnica_profesional),
+          borderColor: '#8b6914',
+          backgroundColor: '#8b6914',
+          borderWidth: 2.5,
+          pointRadius: 3,
+          tension: 0.3,
+        },
+        {
+          label: 'Posgrado (esp. + maestría + doct.)',
+          data: datos.map(d => (d.especializacion || 0) + (d.maestria || 0) + (d.doctorado || 0)),
+          borderColor: '#c0392b',
+          backgroundColor: '#c0392b',
+          borderWidth: 2.5,
+          pointRadius: 3,
+          tension: 0.3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { usePointStyle: true, pointStyle: 'circle', font: { size: 10 } }
+        },
+        tooltip: {
+          callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y) }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => fmtNum(v), font: { size: 10 } },
+          grid: { color: '#ecf0f1' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function actualizarChartBogotaCol() {
+  const datos = DATOS_SUP.sort((a, b) => a.anio - b.anio);
+
+  if (chartBogotaCol) chartBogotaCol.destroy();
+  chartBogotaCol = new Chart(document.getElementById('chart-bogota-col'), {
+    type: 'line',
+    data: {
+      labels: datos.map(d => d.anio),
+      datasets: [
+        {
+          label: 'Colombia',
+          data: datos.map(d => d.total_colombia),
+          borderColor: '#7f8c8d',
+          backgroundColor: 'rgba(127, 140, 141, 0.1)',
+          borderWidth: 2.5,
+          pointRadius: 3,
+          tension: 0.3,
+          fill: true,
+        },
+        {
+          label: 'Bogotá',
+          data: datos.map(d => d.total_bogota),
+          borderColor: '#c49518',
+          backgroundColor: 'rgba(196, 149, 24, 0.15)',
+          borderWidth: 2.5,
+          pointRadius: 3,
+          tension: 0.3,
+          fill: true,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { usePointStyle: true, pointStyle: 'circle', font: { size: 11 } }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y),
+            afterBody: function(items) {
+              const idx = items[0].dataIndex;
+              const d = DATOS_SUP[idx];
+              if (d && d.pct_bogota != null) {
+                return 'Participación Bogotá: ' + fmtDec(d.pct_bogota, 1) + ' %';
+              }
+              return '';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => fmtNum(v), font: { size: 10 } },
           grid: { color: '#ecf0f1' }
         },
         x: { ticks: { font: { size: 10 } }, grid: { display: false } }

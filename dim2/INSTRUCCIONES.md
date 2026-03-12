@@ -2,72 +2,104 @@
 
 ## Datos que usa esta dimensión
 
-| Indicador | Fuente | Archivo | Frecuencia |
-|-----------|--------|---------|------------|
-| Cobertura, deserción, aprobación, reprobación y repitencia en preescolar, básica y media | MEN – Estadísticas en educación por departamento (datos.gov.co) | CSV descargado de datos abiertos | Anual (cuando el MEN publique nuevos datos) |
+| Sección | Indicador | Fuente | Archivo | Frecuencia |
+|---------|-----------|--------|---------|------------|
+| 2.1 Educación media | Cobertura, deserción, aprobación, reprobación y repitencia | MEN – Estadísticas en educación por departamento (datos.gov.co) | CSV en `fuentes/` | Anual |
+| 2.2 Educación superior | Matrículas por nivel de formación (técnica, tecnológica, universitaria, posgrado) | MEN – Estadísticas de matrícula por municipio (datos.gov.co) | CSV en `fuentes/Educ superior/` | Anual |
 
-**Nota:** Este dataset cubre indicadores de educación en preescolar, básica y media por departamento. Se filtra por Bogotá D.C. Los datos disponibles actualmente van de 2011 a 2024.
+---
 
-## Indicadores disponibles en el CSV
+## 2.1 Educación media
 
-- **Cobertura neta:** total, transición, primaria, secundaria, media
-- **Cobertura bruta:** total, transición, primaria, secundaria, media
-- **Deserción:** total, transición, primaria, secundaria, media
-- **Aprobación:** total, transición, primaria, secundaria, media
-- **Reprobación:** total, transición, primaria, secundaria, media
-- **Repitencia:** total, transición, primaria, secundaria, media
-- **Otros:** población 5-16, tasa de matriculación, tamaño promedio de grupo, sedes conectadas a internet
+**Dataset:** [MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-BÁSICA_Y_MEDIA_POR_DEPARTAMENTO](https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-B-SICA/ji8i-4anb/about_data)
 
-## Cómo actualizar
+**Nota:** Se filtra por Bogotá D.C. Los datos disponibles actualmente van de 2011 a 2024.
 
-### 1. Descargar el CSV actualizado
+### Indicadores disponibles
 
-- Ir a: https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-B-SICA/ji8i-4anb/about_data
-- Clic en **Exportar** → **CSV**
-- El archivo se descarga con un nombre como `MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR,_BÁSICA_Y_MEDIA_POR_DEPARTAMENTO_YYYYMMDD.csv`
+- **Cobertura neta y bruta:** total, transición, primaria, secundaria, media
+- **Deserción, aprobación, reprobación, repitencia:** total, transición, primaria, secundaria, media
 
-### 2. Copiar el archivo a `dim2/fuentes/`
+### Cómo actualizar
 
-Pegar el nuevo archivo en `dim2/fuentes/`. **No borrar el anterior** (sirve de respaldo).
+1. Ir al dataset → **Exportar** → **CSV**
+2. Pegar el archivo en `dim2/fuentes/` (no borrar el anterior)
+3. Ejecutar:
+   ```bash
+   python dim2/actualizar.py
+   ```
+4. Subir a GitHub:
+   ```bash
+   git add dim2/fuentes/ dim2/data/
+   git commit -m "Actualizar datos de educación media"
+   git push
+   ```
 
-### 3. Ejecutar el script de actualización
+---
 
-```bash
-python dim2/actualizar.py
-```
+## 2.2 Educación superior
 
-El script busca automáticamente el archivo CSV más reciente en la carpeta.
+**Dataset:** [MEN_ESTADISTICAS-MATRICULA-POR-MUNICIPIOS_ES](https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS-MATRICULA-POR-MUNICIPIOS_ES/y9ga-zwzy/about_data)
 
-### 4. Subir a GitHub
+**Nota:** Este dataset tiene ~19.600 filas (todos los municipios de Colombia). El script filtra por Bogotá (código municipio 11001) y calcula totales nacionales. Datos disponibles: 2005 a 2021.
 
-```bash
-git add dim2/fuentes/ dim2/data/
-git commit -m "Actualizar datos de educación básica y media"
-git push
-```
+**Importante:** No usar la API de datos.gov.co para descargar (tiene límite de 1.000 filas). Usar el botón **"Descargar archivo"** → **CSV**.
 
-### 5. Verificar
+### Indicadores que se extraen
+
+- **Matrículas por nivel:** técnica profesional, tecnológica, universitaria, especialización, maestría, doctorado
+- **Total Bogotá vs. total Colombia** (con porcentaje de participación)
+- **IES con oferta** en Bogotá
+
+### Cómo actualizar
+
+1. Ir al dataset → **Descargar archivo** → **CSV** (no usar "Exportar" ni la API)
+2. Pegar el archivo en `dim2/fuentes/Educ superior/` (no borrar el anterior)
+3. Ejecutar:
+   ```bash
+   python dim2/actualizar_educ_superior.py
+   ```
+4. Subir a GitHub:
+   ```bash
+   git add dim2/fuentes/ dim2/data/
+   git commit -m "Actualizar datos de educación superior"
+   git push
+   ```
+
+### Notas sobre el CSV
+
+- Los números usan formato colombiano (puntos como miles: "63.098" = 63.098 matrículas)
+- El nombre de Bogotá varía entre años ("BOGOTÁ D.C.", "BOGOTA D.C.", "Bogotá, D.C."). El script los detecta todos.
+- Hay filas duplicadas por variantes del nombre. El script deduplica por código de municipio.
+
+---
+
+## Verificar después de actualizar
 
 - Ir a: https://sdis-juventud.github.io/tablero-cij/dim2/
-- Revisar que los datos se vean bien y que el último año disponible aparezca.
+- Revisar que las dos secciones (2.1 y 2.2) muestren datos correctos
+- Verificar que el último año disponible aparezca en cada selector
 
 ## Qué hacer si el formato cambió
 
-Si el script falla porque el MEN cambió el formato del CSV:
+Si algún script falla porque el MEN cambió el formato del CSV:
 
-1. Abrir el nuevo archivo en Excel o un editor de texto.
-2. Verificar que las columnas sigan teniendo los mismos nombres (COBERTURA_NETA, DESERCIÓN, etc.).
-3. Verificar que Bogotá siga apareciendo como "Bogotá, D.C." en la columna DEPARTAMENTO.
-4. Avisar a Carolina para ajustar el script.
+1. Abrir el nuevo archivo en Excel o un editor de texto
+2. Verificar que las columnas sigan teniendo los mismos nombres
+3. Verificar que Bogotá aparezca (buscar "BOGOT" en el archivo)
+4. Avisar a Carolina para ajustar el script
 
 ## Archivos de esta dimensión
 
 ```
 dim2/
-├── index.html          ← Página web de la dimensión
-├── actualizar.py       ← Script que procesa el CSV del MEN
-├── fuentes/            ← Aquí se guarda el CSV descargado
-├── data/               ← JSONs generados automáticamente
-│   └── educacion_media.json
-└── INSTRUCCIONES.md    ← Este archivo
+├── index.html                    ← Página web (secciones 2.1 y 2.2)
+├── actualizar.py                 ← Script para educación media
+├── actualizar_educ_superior.py   ← Script para educación superior
+├── fuentes/                      ← CSVs de educación media
+│   └── Educ superior/            ← CSVs de educación superior
+├── data/                         ← JSONs generados automáticamente
+│   ├── educacion_media.json
+│   └── educacion_superior.json
+└── INSTRUCCIONES.md              ← Este archivo
 ```
