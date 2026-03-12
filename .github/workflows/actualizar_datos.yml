@@ -1,11 +1,11 @@
 # Actualiza los JSONs del tablero automáticamente cuando se sube
-# un nuevo archivo Excel del DANE a la carpeta fuentes/
+# un nuevo archivo Excel a cualquier carpeta dim*/fuentes/
 name: Actualizar datos
 
 on:
   push:
     paths:
-      - 'fuentes/**'
+      - 'dim*/fuentes/**'
 
 jobs:
   actualizar:
@@ -20,19 +20,26 @@ jobs:
       - name: Instalar dependencias
         run: pip install openpyxl
 
-      - name: Ejecutar script de actualización
-        run: python actualizar_datos.py
+      # Ejecuta el script de cada dimensión que tenga uno
+      - name: Ejecutar scripts de actualización
+        run: |
+          for script in dim*/actualizar.py; do
+            if [ -f "$script" ]; then
+              echo ">>> Ejecutando $script"
+              python "$script"
+            fi
+          done
 
       - name: Verificar si hay cambios
         id: check
         run: |
-          git diff --quiet data/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+          git diff --quiet dim*/data/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Commit y push datos actualizados
         if: steps.check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/
-          git commit -m "Actualizar datos mercado laboral (automático)"
+          git add dim*/data/
+          git commit -m "Actualizar datos del tablero (automático)"
           git push
