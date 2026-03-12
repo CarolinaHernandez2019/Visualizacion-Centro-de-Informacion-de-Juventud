@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro de Información de Juventud - Dimensión 1: Ser joven</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --dorado: #c9a51a;
+      --dorado-oscuro: #a88a14;
+      --dorado-claro: #e0c94a;
+      --naranja: #e67e22;
+      --naranja-claro: #f5a623;
+      --gris-oscuro: #2c3e50;
+      --gris: #7f8c8d;
+      --gris-claro: #ecf0f1;
+      --blanco: #ffffff;
+      --marron: #8b6914;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gris-claro);
+      color: var(--gris-oscuro);
+      line-height: 1.5;
+    }
+
+    .header {
+      background: var(--dorado);
+      color: var(--blanco);
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .header svg { width: 32px; height: 32px; fill: var(--blanco); }
+    .header h1 { font-size: 1.4rem; font-weight: 600; flex: 1; }
+    .header .btn-home {
+      color: var(--blanco);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 6px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .header .btn-home:hover { background: rgba(255,255,255,0.15); border-color: var(--blanco); }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: var(--gris);
+      margin-bottom: 1rem;
+    }
+    .page-subtitle span { font-weight: 600; color: var(--gris-oscuro); }
+
+    /* KPIs */
+    .kpis {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      background: var(--blanco);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .kpi-icon { font-size: 2.5rem; }
+    .kpi-icon svg { width: 48px; height: 48px; fill: var(--gris-oscuro); }
+    .kpi-valor { font-size: 1.8rem; font-weight: 700; color: var(--dorado); }
+    .kpi-label { font-size: 0.85rem; color: var(--gris); }
+
+    /* Filtros */
+    .filtros {
+      background: var(--blanco);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .filtros label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filtro-grupo { display: flex; align-items: center; gap: 0.5rem; }
+    .filtro-select {
+      padding: 6px 12px;
+      border: 2px solid var(--gris-claro);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--gris-oscuro);
+      background: var(--blanco);
+      cursor: pointer;
+      min-width: 140px;
+    }
+    .filtro-select:focus { outline: none; border-color: var(--dorado); }
+
+    /* Grid */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 960px) { .grid-2col { grid-template-columns: 1fr; } }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 1100px) { .grid-3col { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--blanco);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--gris-claro);
+    }
+
+    /* Gráfico de barras horizontales por edad */
+    .edad-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 3px;
+      font-size: 0.78rem;
+    }
+    .edad-label {
+      width: 22px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--gris);
+    }
+    .bar-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      height: 22px;
+    }
+    .bar-h {
+      background: var(--dorado);
+      height: 100%;
+      border-radius: 2px 0 0 2px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 4px;
+      color: var(--blanco);
+      font-size: 0.7rem;
+      font-weight: 600;
+      min-width: 30px;
+    }
+    .bar-m {
+      background: var(--naranja);
+      height: 100%;
+      border-radius: 0 2px 2px 0;
+      display: flex;
+      align-items: center;
+      padding-left: 4px;
+      color: var(--blanco);
+      font-size: 0.7rem;
+      font-weight: 600;
+      min-width: 30px;
+    }
+    .leyenda-sexo {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+    }
+    .leyenda-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    /* Tabla localidades */
+    .tabla-loc {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    .tabla-loc th {
+      background: var(--gris-oscuro);
+      color: var(--blanco);
+      padding: 6px 10px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+    .tabla-loc td {
+      padding: 5px 10px;
+      border-bottom: 1px solid var(--gris-claro);
+    }
+    .tabla-loc tr:hover { background: #f8f9fa; }
+    .tabla-loc .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .tabla-loc .bar-cell { width: 120px; }
+    .tabla-loc .bar-bg {
+      background: var(--gris-claro);
+      height: 14px;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .tabla-loc .bar-fill {
+      background: var(--dorado);
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .chart-container { position: relative; height: 300px; }
+
+    .footer {
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--gris-claro);
+    }
+    .footer-notas {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      font-size: 0.72rem;
+      line-height: 1.6;
+      color: #666;
+    }
+    .footer-notas p { margin-bottom: 0.3rem; }
+    .footer-notas p:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    <h1>Dimensión 1 – Ser joven</h1>
+    <a href="../index.html" class="btn-home">&#8592; Inicio</a>
+  </div>
+
+  <div class="container">
+    <p class="page-subtitle">
+      <span>1.1 Características demográficas de los jóvenes en Bogotá</span><br>
+      Fuente: DANE, Proyecciones Censo Nacional de Población y Vivienda (CNPV 2018)
+    </p>
+
+    <!-- KPIs y Filtros -->
+    <div class="kpis">
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="16" r="10"/><path d="M16 58c0-12 7-20 16-20s16 8 16 20z"/></svg>
+        </div>
+        <div>
+          <div class="kpi-valor" id="kpi-total">1.823.809</div>
+          <div class="kpi-label">Jóvenes</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <svg viewBox="0 0 80 64"><circle cx="40" cy="12" r="8"/><path d="M28 56c0-10 5-16 12-16s12 6 12 16z"/><circle cx="20" cy="18" r="6"/><path d="M12 56c0-8 4-13 8-13s8 5 8 13z"/><circle cx="60" cy="18" r="6"/><path d="M52 56c0-8 4-13 8-13s8 5 8 13z"/></svg>
+        </div>
+        <div>
+          <div class="kpi-valor" id="kpi-pct">22,70 %</div>
+          <div class="kpi-label">del total de la población</div>
+        </div>
+      </div>
+
+      <div class="filtros" style="margin-bottom:0; flex:1;">
+        <div class="filtro-grupo">
+          <label>Año</label>
+          <select class="filtro-select" id="filtro-anio"></select>
+        </div>
+        <div class="filtro-grupo">
+          <label>Localidad</label>
+          <select class="filtro-select" id="filtro-loc">
+            <option value="Todas">Todas</option>
+          </select>
+        </div>
+        <div class="filtro-grupo">
+          <label>Sexo</label>
+          <select class="filtro-select" id="filtro-sexo">
+            <option value="Todos">Todos</option>
+            <option value="Hombres">Hombres</option>
+            <option value="Mujeres">Mujeres</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fila 1: Zona + Pirámide edad/sexo + Localidades -->
+    <div class="grid-3col">
+      <!-- Jóvenes por zona -->
+      <div class="card">
+        <div class="card-title">Cantidad de jóvenes por zona</div>
+        <div class="chart-container" style="height:260px;">
+          <canvas id="chart-zona"></canvas>
+        </div>
+      </div>
+
+      <!-- Proporción por edad y sexo -->
+      <div class="card">
+        <div class="card-title">Proporción de jóvenes por edad y sexo</div>
+        <div class="leyenda-sexo">
+          <span><span class="leyenda-dot" style="background:var(--dorado)"></span> Hombres</span>
+          <span><span class="leyenda-dot" style="background:var(--naranja)"></span> Mujeres</span>
+        </div>
+        <div id="piramide-edad"></div>
+      </div>
+
+      <!-- Distribución por localidad -->
+      <div class="card" style="overflow-y:auto; max-height: 420px;">
+        <div class="card-title">Distribución de cantidad de jóvenes por localidad</div>
+        <table class="tabla-loc" id="tabla-localidades">
+          <thead>
+            <tr>
+              <th>Localidad</th>
+              <th class="num">Jóvenes</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-loc-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Fila 2: Proyección en el tiempo -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-title">Proyección de jóvenes en el tiempo (2024 – 2035)</div>
+      <div class="chart-container" style="height:280px;">
+        <canvas id="chart-proyeccion"></canvas>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-top">
+        <div>
+          Fuente: Proyecciones Censo Nacional de Población y Vivienda – CNPV 2018, DANE<br>
+          Población joven: 14 a 28 años (Ley 1622 de 2013, Estatuto de Ciudadanía Juvenil).
+        </div>
+        <div style="text-align:right;">
+          Secretaría de Integración Social<br>
+          Subdirección para la Juventud – Centro de Información de Juventud
+        </div>
+      </div>
+      <div class="footer-notas">
+        <p><strong>Sobre el rango de edad:</strong> esta dimensión usa el rango de 14 a 28 años definido por la Ley 1622 de 2013. La dimensión 3 (Inclusión productiva) usa 15 a 28 años porque el DANE mide la Población en Edad de Trabajar (PET) desde los 15 años, siguiendo el estándar de la OIT.</p>
+        <p><strong>Proyecciones:</strong> basadas en el Censo Nacional de Población y Vivienda 2018. Se actualizan cuando el DANE publica nuevas proyecciones.</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+// Formato colombiano
+function fmtMiles(n) {
+  if (n == null) return '–';
+  return Math.round(n).toLocaleString('es-CO');
+}
+function fmtDec(n, d=1) {
+  if (n == null) return '–';
+  return n.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+function fmtPct(n) {
+  if (n == null) return '–';
+  return fmtDec(n, 2) + ' %';
+}
+
+let RESUMEN = [];
+let LOCALIDADES = [];
+let chartZona = null;
+let chartProy = null;
+
+// Cargar datos
+Promise.all([
+  fetch('data/resumen_bogota.json').then(r => r.json()),
+  fetch('data/localidades.json').then(r => r.json())
+]).then(([resumen, localidades]) => {
+  RESUMEN = resumen;
+  LOCALIDADES = localidades;
+  initFiltros();
+  actualizarTodo();
+});
+
+function initFiltros() {
+  // Años
+  const selAnio = document.getElementById('filtro-anio');
+  const anios = [...new Set(RESUMEN.map(d => d.anio))].sort();
+  anios.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a; opt.textContent = a;
+    if (a === 2024) opt.selected = true;
+    selAnio.appendChild(opt);
+  });
+
+  // Localidades
+  const selLoc = document.getElementById('filtro-loc');
+  const locs = [...new Set(LOCALIDADES.map(d => d.localidad))].sort();
+  locs.forEach(l => {
+    const opt = document.createElement('option');
+    opt.value = l; opt.textContent = l;
+    selLoc.appendChild(opt);
+  });
+
+  selAnio.onchange = actualizarTodo;
+  selLoc.onchange = actualizarTodo;
+  document.getElementById('filtro-sexo').onchange = actualizarTodo;
+}
+
+function getFiltros() {
+  return {
+    anio: parseInt(document.getElementById('filtro-anio').value),
+    loc: document.getElementById('filtro-loc').value,
+    sexo: document.getElementById('filtro-sexo').value,
+  };
+}
+
+function actualizarTodo() {
+  const f = getFiltros();
+  actualizarKPIs(f);
+  actualizarZona(f);
+  actualizarPiramide(f);
+  actualizarTablaLocalidades(f);
+  actualizarProyeccion(f);
+}
+
+function actualizarKPIs(f) {
+  const r = RESUMEN.find(d => d.anio === f.anio);
+  if (!r) return;
+
+  let totalJovenes, totalPob;
+
+  if (f.loc === 'Todas') {
+    if (f.sexo === 'Hombres') {
+      totalJovenes = r.jovenes_hombres;
+    } else if (f.sexo === 'Mujeres') {
+      totalJovenes = r.jovenes_mujeres;
+    } else {
+      totalJovenes = r.jovenes_total;
+    }
+    totalPob = r.poblacion_total;
+  } else {
+    const locData = LOCALIDADES.filter(d => d.anio === f.anio && d.localidad === f.loc);
+    if (locData.length === 0) return;
+    const ld = locData[0];
+    if (f.sexo === 'Hombres') {
+      totalJovenes = ld.jovenes_hombres;
+    } else if (f.sexo === 'Mujeres') {
+      totalJovenes = ld.jovenes_mujeres;
+    } else {
+      totalJovenes = ld.jovenes_total;
+    }
+    totalPob = ld.poblacion_total;
+  }
+
+  document.getElementById('kpi-total').textContent = fmtMiles(totalJovenes);
+  const pct = totalPob > 0 ? (totalJovenes / totalPob * 100) : 0;
+  document.getElementById('kpi-pct').textContent = fmtPct(pct);
+}
+
+function actualizarZona(f) {
+  const r = RESUMEN.find(d => d.anio === f.anio);
+  if (!r) return;
+
+  if (chartZona) chartZona.destroy();
+  chartZona = new Chart(document.getElementById('chart-zona'), {
+    type: 'bar',
+    data: {
+      labels: ['Cabecera\nMunicipal', 'Centros Poblados y\nRural Disperso'],
+      datasets: [{
+        data: [r.zona_cabecera, r.zona_rural],
+        backgroundColor: ['#c9a51a', '#e0c94a'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => fmtMiles(ctx.parsed.y) }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: v => {
+              if (v >= 1000000) return fmtDec(v/1000000) + ' mill.';
+              if (v >= 1000) return fmtMiles(v/1000) + ' mil';
+              return fmtMiles(v);
+            },
+            font: { size: 11 }
+          },
+          grid: { color: '#ecf0f1' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function actualizarPiramide(f) {
+  const r = RESUMEN.find(d => d.anio === f.anio);
+  if (!r) return;
+
+  const container = document.getElementById('piramide-edad');
+  container.innerHTML = '';
+
+  // Encontrar el máximo para escalar las barras
+  let maxVal = 0;
+  for (let edad = 14; edad <= 28; edad++) {
+    const h = r.por_edad_hombres[edad] || 0;
+    const m = r.por_edad_mujeres[edad] || 0;
+    maxVal = Math.max(maxVal, h, m);
+  }
+
+  for (let edad = 14; edad <= 28; edad++) {
+    const h = r.por_edad_hombres[edad] || 0;
+    const m = r.por_edad_mujeres[edad] || 0;
+    const pctH = maxVal > 0 ? (h / maxVal * 100) : 0;
+    const pctM = maxVal > 0 ? (m / maxVal * 100) : 0;
+
+    const row = document.createElement('div');
+    row.className = 'edad-row';
+
+    // Barra hombres (derecha a izquierda) + label + barra mujeres (izquierda a derecha)
+    row.innerHTML = `
+      <div style="flex:1; display:flex; justify-content:flex-end;">
+        <div class="bar-h" style="width:${pctH}%">${fmtMiles(h)}</div>
+      </div>
+      <div class="edad-label">${edad}</div>
+      <div style="flex:1; display:flex;">
+        <div class="bar-m" style="width:${pctM}%">${fmtMiles(m)}</div>
+      </div>
+    `;
+    container.appendChild(row);
+  }
+}
+
+function actualizarTablaLocalidades(f) {
+  const tbody = document.getElementById('tabla-loc-body');
+  tbody.innerHTML = '';
+
+  const datos = LOCALIDADES.filter(d => d.anio === f.anio)
+    .map(d => ({
+      localidad: d.localidad,
+      jovenes: f.sexo === 'Hombres' ? d.jovenes_hombres :
+               f.sexo === 'Mujeres' ? d.jovenes_mujeres : d.jovenes_total,
+    }))
+    .sort((a, b) => b.jovenes - a.jovenes);
+
+  const maxJov = datos.length > 0 ? datos[0].jovenes : 1;
+
+  datos.forEach(d => {
+    const pct = (d.jovenes / maxJov * 100);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${d.localidad}</td>
+      <td class="num">${fmtMiles(d.jovenes)}</td>
+      <td class="bar-cell">
+        <div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function actualizarProyeccion(f) {
+  // Proyección desde 2024 en adelante
+  const datos = RESUMEN.filter(d => d.anio >= 2024).sort((a, b) => a.anio - b.anio);
+
+  const valores = datos.map(d => {
+    if (f.sexo === 'Hombres') return d.jovenes_hombres;
+    if (f.sexo === 'Mujeres') return d.jovenes_mujeres;
+    return d.jovenes_total;
+  });
+
+  if (chartProy) chartProy.destroy();
+  chartProy = new Chart(document.getElementById('chart-proyeccion'), {
+    type: 'line',
+    data: {
+      labels: datos.map(d => d.anio),
+      datasets: [{
+        label: 'Jóvenes (14-28)',
+        data: valores,
+        borderColor: '#c9a51a',
+        backgroundColor: 'rgba(201, 165, 26, 0.1)',
+        borderWidth: 3,
+        pointRadius: 5,
+        pointBackgroundColor: '#c9a51a',
+        tension: 0.3,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => fmtMiles(ctx.parsed.y) + ' jóvenes'
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: v => {
+              if (v >= 1000000) return fmtDec(v/1000) + ' mil';
+              return fmtMiles(v);
+            },
+            font: { size: 11 }
+          },
+          grid: { color: '#ecf0f1' }
+        },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+</script>
+
+</body>
+</html>
