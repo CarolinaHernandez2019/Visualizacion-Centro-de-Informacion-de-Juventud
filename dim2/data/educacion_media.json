@@ -1,0 +1,128 @@
+[
+  {
+    "anio": 2011,
+    "cobertura_bruta": 87.76,
+    "cobertura_neta": 55.01,
+    "aprobacion": 97.45,
+    "reprobacion": 0.0,
+    "repitencia": 2.57,
+    "desercion": 2.55
+  },
+  {
+    "anio": 2012,
+    "cobertura_bruta": 78.59,
+    "cobertura_neta": 51.78,
+    "aprobacion": 95.55,
+    "reprobacion": 0.0,
+    "repitencia": 4.08,
+    "desercion": 4.45
+  },
+  {
+    "anio": 2013,
+    "cobertura_bruta": 85.53,
+    "cobertura_neta": 52.67,
+    "aprobacion": 96.26,
+    "reprobacion": 0.0,
+    "repitencia": 5.54,
+    "desercion": 3.74
+  },
+  {
+    "anio": 2014,
+    "cobertura_bruta": 78.68,
+    "cobertura_neta": 49.97,
+    "aprobacion": 97.35,
+    "reprobacion": 0.17,
+    "repitencia": 8.14,
+    "desercion": 2.48
+  },
+  {
+    "anio": 2015,
+    "cobertura_bruta": 81.94,
+    "cobertura_neta": 50.61,
+    "aprobacion": 96.57,
+    "reprobacion": 0.23,
+    "repitencia": 7.94,
+    "desercion": 3.2
+  },
+  {
+    "anio": 2016,
+    "cobertura_bruta": 82.07,
+    "cobertura_neta": 49.73,
+    "aprobacion": 95.98,
+    "reprobacion": 2.0,
+    "repitencia": 2.09,
+    "desercion": 2.02
+  },
+  {
+    "anio": 2017,
+    "cobertura_bruta": 82.66,
+    "cobertura_neta": 49.3,
+    "aprobacion": 96.18,
+    "reprobacion": 2.27,
+    "repitencia": 0.06,
+    "desercion": 1.55
+  },
+  {
+    "anio": 2018,
+    "cobertura_bruta": 93.18,
+    "cobertura_neta": 56.01,
+    "aprobacion": 96.32,
+    "reprobacion": 2.15,
+    "repitencia": 0.21,
+    "desercion": 1.53
+  },
+  {
+    "anio": 2019,
+    "cobertura_bruta": 92.09,
+    "cobertura_neta": 55.49,
+    "aprobacion": 96.25,
+    "reprobacion": 2.34,
+    "repitencia": 1.44,
+    "desercion": 1.41
+  },
+  {
+    "anio": 2020,
+    "cobertura_bruta": 97.06,
+    "cobertura_neta": 57.3,
+    "aprobacion": 92.12,
+    "reprobacion": 7.33,
+    "repitencia": 2.27,
+    "desercion": 0.55
+  },
+  {
+    "anio": 2021,
+    "cobertura_bruta": 99.55,
+    "cobertura_neta": 58.84,
+    "aprobacion": 87.15,
+    "reprobacion": 10.97,
+    "repitencia": 2.39,
+    "desercion": 1.88
+  },
+  {
+    "anio": 2022,
+    "cobertura_bruta": 103.61,
+    "cobertura_neta": 62.05,
+    "aprobacion": 91.74,
+    "reprobacion": 5.46,
+    "repitencia": 3.45,
+    "desercion": 2.8
+  },
+  {
+    "anio": 2023,
+    "cobertura_bruta": 107.3,
+    "cobertura_neta": 64.42,
+    "aprobacion": 91.35,
+    "reprobacion": 6.5,
+    "repitencia": 3.2,
+    "desercion": 2.16
+  },
+  {
+    "anio": 2024,
+    "cobertura_bruta": 106.07,
+    "cobertura_neta": 65.32,
+    "aprobacion": 92.37,
+    "reprobacion": 5.63,
+    "repitencia": 3.75,
+    "desercion": 2.0
+  }
+]

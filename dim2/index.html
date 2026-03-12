@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro de Información de Juventud - Dimensión 2: Educación</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --naranja: #c49518;
+      --naranja-oscuro: #a07812;
+      --naranja-claro: #e8b84a;
+      --rojo: #c0392b;
+      --rojo-claro: #e74c3c;
+      --gris-oscuro: #2c3e50;
+      --gris: #7f8c8d;
+      --gris-claro: #ecf0f1;
+      --blanco: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gris-claro);
+      color: var(--gris-oscuro);
+      line-height: 1.5;
+    }
+
+    .header {
+      background: var(--naranja);
+      color: var(--blanco);
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .header svg { width: 32px; height: 32px; fill: var(--blanco); }
+    .header h1 { font-size: 1.4rem; font-weight: 600; flex: 1; }
+    .header .btn-home {
+      color: var(--blanco);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 6px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .header .btn-home:hover { background: rgba(255,255,255,0.15); border-color: var(--blanco); }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: var(--gris);
+      margin-bottom: 1rem;
+    }
+    .page-subtitle span { font-weight: 600; color: var(--gris-oscuro); }
+
+    /* Filtro */
+    .filtros {
+      background: var(--blanco);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .filtros label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filtro-grupo { display: flex; align-items: center; gap: 0.5rem; }
+    .filtro-select {
+      padding: 6px 12px;
+      border: 2px solid var(--gris-claro);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--gris-oscuro);
+      background: var(--blanco);
+      cursor: pointer;
+      min-width: 100px;
+    }
+    .filtro-select:focus { outline: none; border-color: var(--naranja); }
+
+    /* KPIs */
+    .kpis-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 800px) { .kpis-row { grid-template-columns: 1fr; } }
+
+    .kpi-group {
+      background: var(--blanco);
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .kpi-group-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--gris-claro);
+    }
+    .kpi-cards {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      flex: 1;
+      min-width: 100px;
+      text-align: center;
+      padding: 0.8rem;
+      border-radius: 8px;
+      background: #faf6eb;
+    }
+    .kpi-card.permanencia { background: #fdf0f0; }
+    .kpi-valor {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--naranja);
+    }
+    .kpi-card.permanencia .kpi-valor { color: var(--rojo); }
+    .kpi-label {
+      font-size: 0.78rem;
+      color: var(--gris);
+      margin-top: 2px;
+    }
+
+    /* Grid */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 960px) { .grid-2col { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--blanco);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--gris-claro);
+    }
+
+    .chart-container { position: relative; height: 320px; }
+
+    .col-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>
+    <h1>Dimensión 2 – Educación</h1>
+    <a href="../index.html" class="btn-home">&#8592; Inicio</a>
+  </div>
+
+  <div class="container">
+    <p class="page-subtitle">
+      <span>2.1 Indicadores de educación media</span><br>
+      Fuente: Ministerio de Educación Nacional – MEN / Datos abiertos
+    </p>
+
+    <!-- Filtro -->
+    <div class="filtros">
+      <div class="filtro-grupo">
+        <label>Año</label>
+        <select class="filtro-select" id="filtro-anio"></select>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis-row">
+      <div class="kpi-group">
+        <div class="kpi-group-title">Tasas de cobertura y aprobación</div>
+        <div class="kpi-cards">
+          <div class="kpi-card">
+            <div class="kpi-valor" id="kpi-cob-bruta">–</div>
+            <div class="kpi-label">Cobertura bruta</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-valor" id="kpi-cob-neta">–</div>
+            <div class="kpi-label">Cobertura neta</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-valor" id="kpi-aprobacion">–</div>
+            <div class="kpi-label">Aprobación</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-group">
+        <div class="kpi-group-title">Tasas de permanencia</div>
+        <div class="kpi-cards">
+          <div class="kpi-card permanencia">
+            <div class="kpi-valor" id="kpi-reprobacion">–</div>
+            <div class="kpi-label">Reprobación</div>
+          </div>
+          <div class="kpi-card permanencia">
+            <div class="kpi-valor" id="kpi-repitencia">–</div>
+            <div class="kpi-label">Repitencia</div>
+          </div>
+          <div class="kpi-card permanencia">
+            <div class="kpi-valor" id="kpi-desercion">–</div>
+            <div class="kpi-label">Deserción</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid-2col">
+      <!-- Izquierda: Cobertura y aprobación -->
+      <div class="card">
+        <div class="card-title">Tasa de cobertura bruta, cobertura neta y aprobación por año</div>
+        <div class="chart-container">
+          <canvas id="chart-cobertura"></canvas>
+        </div>
+      </div>
+
+      <!-- Derecha: Permanencia -->
+      <div class="col-right">
+        <div class="card">
+          <div class="card-title">Histórico de tasas de reprobación y repitencia</div>
+          <div class="chart-container" style="height:200px;">
+            <canvas id="chart-reprobacion"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Histórico de tasa de deserción</div>
+          <div class="chart-container" style="height:200px;">
+            <canvas id="chart-desercion"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-top">
+        <div>
+          Fuente: Ministerio de Educación Nacional – MEN / Datos abiertos<br>
+          Indicadores de educación media por departamento, filtrados para Bogotá D.C.
+        </div>
+        <div style="text-align:right;">
+          Secretaría de Integración Social<br>
+          Subdirección para la Juventud – Centro de Información de Juventud
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// Formato colombiano
+function fmtDec(n, d=2) {
+  if (n == null) return '–';
+  return n.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+function fmtPct(n) {
+  if (n == null) return '–';
+  return fmtDec(n, 2) + ' %';
+}
+
+let DATOS = [];
+let chartCobertura = null;
+let chartReprobacion = null;
+let chartDesercion = null;
+
+// Cargar datos
+fetch('data/educacion_media.json')
+  .then(r => r.json())
+  .then(datos => {
+    DATOS = datos;
+    initFiltros();
+    actualizarTodo();
+  });
+
+function initFiltros() {
+  const selAnio = document.getElementById('filtro-anio');
+  const anios = DATOS.map(d => d.anio).sort();
+  anios.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a; opt.textContent = a;
+    if (a === Math.max(...anios)) opt.selected = true;
+    selAnio.appendChild(opt);
+  });
+  selAnio.onchange = actualizarTodo;
+}
+
+function getAnio() {
+  return parseInt(document.getElementById('filtro-anio').value);
+}
+
+function actualizarTodo() {
+  const anio = getAnio();
+  actualizarKPIs(anio);
+  actualizarChartCobertura();
+  actualizarChartReprobacion();
+  actualizarChartDesercion();
+}
+
+function actualizarKPIs(anio) {
+  const d = DATOS.find(r => r.anio === anio);
+  if (!d) return;
+
+  document.getElementById('kpi-cob-bruta').textContent = fmtPct(d.cobertura_bruta);
+  document.getElementById('kpi-cob-neta').textContent = fmtPct(d.cobertura_neta);
+  document.getElementById('kpi-aprobacion').textContent = fmtPct(d.aprobacion);
+  document.getElementById('kpi-reprobacion').textContent = fmtPct(d.reprobacion);
+  document.getElementById('kpi-repitencia').textContent = fmtPct(d.repitencia);
+  document.getElementById('kpi-desercion').textContent = fmtPct(d.desercion);
+}
+
+function actualizarChartCobertura() {
+  const datos = DATOS.sort((a, b) => a.anio - b.anio);
+
+  if (chartCobertura) chartCobertura.destroy();
+  chartCobertura = new Chart(document.getElementById('chart-cobertura'), {
+    type: 'line',
+    data: {
+      labels: datos.map(d => d.anio),
+      datasets: [
+        {
+          label: 'Tasa de cobertura bruta',
+          data: datos.map(d => d.cobertura_bruta),
+          borderColor: '#c49518',
+          backgroundColor: '#c49518',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#c49518',
+          tension: 0.3,
+        },
+        {
+          label: 'Tasa de cobertura neta',
+          data: datos.map(d => d.cobertura_neta),
+          borderColor: '#e8b84a',
+          backgroundColor: '#e8b84a',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#e8b84a',
+          tension: 0.3,
+        },
+        {
+          label: 'Tasa de aprobación',
+          data: datos.map(d => d.aprobacion),
+          borderColor: '#c0392b',
+          backgroundColor: '#c0392b',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#c0392b',
+          tension: 0.3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { usePointStyle: true, pointStyle: 'circle', font: { size: 11 } }
+        },
+        tooltip: {
+          callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtDec(ctx.parsed.y) + ' %' }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: v => fmtDec(v, 0) + ' %',
+            font: { size: 11 }
+          },
+          grid: { color: '#ecf0f1' }
+        },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function actualizarChartReprobacion() {
+  const datos = DATOS.sort((a, b) => a.anio - b.anio);
+
+  if (chartReprobacion) chartReprobacion.destroy();
+  chartReprobacion = new Chart(document.getElementById('chart-reprobacion'), {
+    type: 'line',
+    data: {
+      labels: datos.map(d => d.anio),
+      datasets: [
+        {
+          label: 'Reprobación',
+          data: datos.map(d => d.reprobacion),
+          borderColor: '#c49518',
+          backgroundColor: '#c49518',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#c49518',
+          tension: 0.3,
+        },
+        {
+          label: 'Repitencia',
+          data: datos.map(d => d.repitencia),
+          borderColor: '#e8b84a',
+          backgroundColor: '#e8b84a',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#e8b84a',
+          tension: 0.3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { usePointStyle: true, pointStyle: 'circle', font: { size: 10 } }
+        },
+        tooltip: {
+          callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtDec(ctx.parsed.y) + ' %' }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: v => fmtDec(v, 0) + ' %',
+            font: { size: 10 }
+          },
+          grid: { color: '#ecf0f1' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function actualizarChartDesercion() {
+  const datos = DATOS.sort((a, b) => a.anio - b.anio);
+
+  if (chartDesercion) chartDesercion.destroy();
+  chartDesercion = new Chart(document.getElementById('chart-desercion'), {
+    type: 'line',
+    data: {
+      labels: datos.map(d => d.anio),
+      datasets: [{
+        label: 'Deserción',
+        data: datos.map(d => d.desercion),
+        borderColor: '#c0392b',
+        backgroundColor: 'rgba(192, 57, 43, 0.1)',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#c0392b',
+        tension: 0.3,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => 'Deserción: ' + fmtDec(ctx.parsed.y) + ' %' }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: v => fmtDec(v, 0) + ' %',
+            font: { size: 10 }
+          },
+          grid: { color: '#ecf0f1' }
+        },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+</script>
+
+</body>
+</html>
