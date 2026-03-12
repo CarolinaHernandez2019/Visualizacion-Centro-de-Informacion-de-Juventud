@@ -140,6 +140,8 @@
       color: var(--naranja);
     }
     .kpi-card.permanencia .kpi-valor { color: var(--rojo); }
+    .kpi-card.aprobacion { background: #eaf7ef; }
+    .kpi-card.aprobacion .kpi-valor { color: #27ae60; }
     .kpi-label {
       font-size: 0.78rem;
       color: var(--gris);
@@ -230,7 +232,7 @@
             <div class="kpi-valor" id="kpi-cob-neta">–</div>
             <div class="kpi-label">Cobertura neta</div>
           </div>
-          <div class="kpi-card">
+          <div class="kpi-card aprobacion">
             <div class="kpi-valor" id="kpi-aprobacion">–</div>
             <div class="kpi-label">Aprobación</div>
           </div>
@@ -506,21 +508,21 @@ function actualizarChartReprobacion() {
         {
           label: 'Reprobación',
           data: datos.map(d => d.reprobacion),
-          borderColor: '#c49518',
-          backgroundColor: '#c49518',
+          borderColor: '#c0392b',
+          backgroundColor: '#c0392b',
           borderWidth: 2.5,
           pointRadius: 4,
-          pointBackgroundColor: '#c49518',
+          pointBackgroundColor: '#c0392b',
           tension: 0.3,
         },
         {
           label: 'Repitencia',
           data: datos.map(d => d.repitencia),
-          borderColor: '#e8b84a',
-          backgroundColor: '#e8b84a',
+          borderColor: '#e74c3c',
+          backgroundColor: '#e74c3c',
           borderWidth: 2.5,
           pointRadius: 4,
-          pointBackgroundColor: '#e8b84a',
+          pointBackgroundColor: '#e74c3c',
           tension: 0.3,
         }
       ]
