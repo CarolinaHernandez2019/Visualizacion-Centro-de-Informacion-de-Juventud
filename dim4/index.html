@@ -5,27 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Centro de Información de Juventud - Dimensión 4: Salud integral y autocuidado</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root {
       --rojo: #b5302a;
       --rojo-oscuro: #8c2420;
       --rojo-claro: #d94f48;
       --naranja: #e07830;
+      --azul: #3a7fc1;
+      --azul-oscuro: #1a4a7a;
+      --azul-claro: #7fb3e0;
       --gris-oscuro: #2c3e50;
       --gris: #7f8c8d;
       --gris-claro: #ecf0f1;
       --blanco: #ffffff;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: var(--gris-claro);
       color: var(--gris-oscuro);
       line-height: 1.5;
     }
-
     .header {
       background: var(--rojo);
       color: var(--blanco);
@@ -48,21 +50,9 @@
       white-space: nowrap;
     }
     .header .btn-home:hover { background: rgba(255,255,255,0.15); border-color: var(--blanco); }
-
-    .container {
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
-
-    .page-subtitle {
-      font-size: 1.1rem;
-      color: var(--gris);
-      margin-bottom: 1rem;
-    }
+    .container { max-width: 1320px; margin: 0 auto; padding: 1.5rem; }
+    .page-subtitle { font-size: 1.1rem; color: var(--gris); margin-bottom: 1rem; }
     .page-subtitle span { font-weight: 600; color: var(--gris-oscuro); }
-
-    /* Filtro */
     .filtros {
       background: var(--blanco);
       border-radius: 10px;
@@ -75,131 +65,69 @@
       flex-wrap: wrap;
     }
     .filtros label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--gris);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 0.85rem; font-weight: 600; color: var(--gris);
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
     .filtro-grupo { display: flex; align-items: center; gap: 0.5rem; }
     .filtro-select {
-      padding: 6px 12px;
-      border: 2px solid var(--gris-claro);
-      border-radius: 6px;
-      font-size: 0.9rem;
-      color: var(--gris-oscuro);
-      background: var(--blanco);
-      cursor: pointer;
-      min-width: 100px;
+      padding: 6px 12px; border: 2px solid var(--gris-claro); border-radius: 6px;
+      font-size: 0.9rem; color: var(--gris-oscuro); background: var(--blanco);
+      cursor: pointer; min-width: 100px;
     }
     .filtro-select:focus { outline: none; border-color: var(--rojo); }
-
-    /* KPIs */
     .kpis-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
     }
     @media (max-width: 800px) { .kpis-row { grid-template-columns: 1fr; } }
-
     .kpi-group {
-      background: var(--blanco);
-      border-radius: 10px;
-      padding: 1.2rem 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      background: var(--blanco); border-radius: 10px;
+      padding: 1.2rem 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .kpi-group-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--gris);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
+      font-size: 0.85rem; font-weight: 700; color: var(--gris);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 1rem; padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--gris-claro);
     }
-    .kpi-cards {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
+    .kpi-cards { display: flex; gap: 1rem; flex-wrap: wrap; }
     .kpi-card {
-      flex: 1;
-      min-width: 100px;
-      text-align: center;
-      padding: 0.8rem;
-      border-radius: 8px;
-      background: #fdf0f0;
+      flex: 1; min-width: 100px; text-align: center;
+      padding: 0.8rem; border-radius: 8px; background: #fdf0f0;
     }
-    .kpi-valor {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--rojo);
-    }
-    .kpi-label {
-      font-size: 0.78rem;
-      color: var(--gris);
-      margin-top: 2px;
-    }
-
-    /* Grid */
+    .kpi-valor { font-size: 1.6rem; font-weight: 700; color: var(--rojo); }
+    .kpi-card.natalidad { background: #e8f0f8; }
+    .kpi-card.natalidad .kpi-valor { color: #2a6aaa; }
+    .kpi-card.mortalidad { background: #fdf0f0; }
+    .kpi-card.mortalidad .kpi-valor { color: var(--rojo); }
+    .kpi-label { font-size: 0.78rem; color: var(--gris); margin-top: 2px; }
     .grid-2col {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
+      display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
     }
     @media (max-width: 960px) { .grid-2col { grid-template-columns: 1fr; } }
-
     .card {
-      background: var(--blanco);
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      background: var(--blanco); border-radius: 10px;
+      padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .card-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--gris);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
+      font-size: 0.85rem; font-weight: 700; color: var(--gris);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 1rem; padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--gris-claro);
     }
-
     .chart-container { position: relative; height: 320px; }
-
-    .col-right {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
     .pendiente-msg {
-      background: var(--blanco);
-      border-radius: 10px;
-      padding: 2rem;
+      background: var(--blanco); border-radius: 10px; padding: 2rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      text-align: center;
-      color: var(--gris);
-      margin-bottom: 1.5rem;
+      text-align: center; color: var(--gris); margin-bottom: 1.5rem;
     }
     .pendiente-msg strong { color: var(--gris-oscuro); }
-
+    #map-natalidad { height: 400px; border-radius: 8px; }
     .footer {
-      margin-top: 1.5rem;
-      padding: 1rem 1.5rem;
-      font-size: 0.8rem;
-      color: var(--gris);
+      margin-top: 1.5rem; padding: 1rem 1.5rem; font-size: 0.8rem; color: var(--gris);
     }
     .footer-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;
     }
   </style>
 </head>
@@ -213,23 +141,20 @@
 
   <div class="container">
 
-    <!-- ============================================================ -->
-    <!-- SECCIÓN 4.1: SGSSS (pendiente) -->
-    <!-- ============================================================ -->
+    <!-- 4.1 SGSSS (pendiente) -->
     <div class="pendiente-msg">
       <strong>4.1 Jóvenes afiliados al SGSSS</strong><br>
       Sección pendiente — datos de régimen de seguridad social aún no disponibles.
     </div>
 
     <!-- ============================================================ -->
-    <!-- SECCIÓN 4.2: Discapacidad -->
+    <!-- 4.2 Discapacidad -->
     <!-- ============================================================ -->
     <p class="page-subtitle">
       <span>4.2 Jóvenes en condición de discapacidad — Bogotá</span><br>
       Fuente: Observatorio de Salud de Bogotá – SaludData (Discapacidad certificada)
     </p>
 
-    <!-- KPIs discapacidad -->
     <div class="kpis-row">
       <div class="kpi-group">
         <div class="kpi-group-title">Jóvenes con discapacidad certificada</div>
@@ -240,7 +165,6 @@
           </div>
         </div>
       </div>
-
       <div class="kpi-group">
         <div class="kpi-group-title">Cantidad por tipo de discapacidad</div>
         <div class="chart-container" style="height:220px;">
@@ -249,7 +173,6 @@
       </div>
     </div>
 
-    <!-- Gráfico por localidad -->
     <div class="card" style="margin-bottom:1.5rem;">
       <div class="card-title">Jóvenes con discapacidad por localidad</div>
       <div class="chart-container" style="height:400px;">
@@ -258,16 +181,15 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- SECCIÓN 4.3: Natalidad -->
+    <!-- 4.3 Natalidad -->
     <!-- ============================================================ -->
-    <hr style="border:none; border-top:3px solid var(--rojo-claro); margin:2.5rem 0 1.5rem;">
+    <hr style="border:none; border-top:3px solid var(--azul); margin:2.5rem 0 1.5rem;">
 
     <p class="page-subtitle">
       <span>4.3 Tasa de natalidad por cada mil en jóvenes</span><br>
       Fuente: Observatorio de Salud de Bogotá – SaludData · Población: DANE, proyecciones CNPV 2018
     </p>
 
-    <!-- Filtro natalidad -->
     <div class="filtros">
       <div class="filtro-grupo">
         <label>Año</label>
@@ -276,30 +198,28 @@
       <div class="filtro-grupo">
         <label>Grupo de edad</label>
         <select class="filtro-select" id="filtro-grupo-nat">
-          <option value="total" selected>Todas (15-28)</option>
+          <option value="total" selected>Todas (15-29)</option>
           <option value="15_19">15 a 19 años</option>
           <option value="20_24">20 a 24 años</option>
-          <option value="25_28">25 a 28 años</option>
+          <option value="25_29">25 a 29 años</option>
         </select>
       </div>
     </div>
 
-    <!-- KPIs natalidad -->
     <div class="kpis-row">
       <div class="kpi-group">
         <div class="kpi-group-title">Indicadores de natalidad en jóvenes</div>
         <div class="kpi-cards">
-          <div class="kpi-card">
+          <div class="kpi-card natalidad">
             <div class="kpi-valor" id="kpi-tasa-nat">–</div>
             <div class="kpi-label">Tasa por cada mil</div>
           </div>
-          <div class="kpi-card">
+          <div class="kpi-card natalidad">
             <div class="kpi-valor" id="kpi-nacidos">–</div>
             <div class="kpi-label">Nacidos vivos</div>
           </div>
         </div>
       </div>
-
       <div class="kpi-group">
         <div class="kpi-group-title">Nacidos vivos por grupo de edad de la madre</div>
         <div class="chart-container" style="height:140px;">
@@ -308,19 +228,73 @@
       </div>
     </div>
 
-    <!-- Gráficos natalidad -->
     <div class="grid-2col">
       <div class="card">
-        <div class="card-title">Histórico de tasa de natalidad por cada mil — jóvenes</div>
+        <div class="card-title">Histórico de tasa de natalidad por cada mil</div>
         <div class="chart-container">
           <canvas id="chart-nat-historico"></canvas>
         </div>
       </div>
-
       <div class="card">
         <div class="card-title">Tasa de natalidad por localidad</div>
+        <div id="map-natalidad"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 4.4 Mortalidad -->
+    <!-- ============================================================ -->
+    <hr style="border:none; border-top:3px solid var(--rojo-claro); margin:2.5rem 0 1.5rem;">
+
+    <p class="page-subtitle">
+      <span>4.4 Mortalidad en jóvenes (15-29 años) — Bogotá</span><br>
+      Fuente: DANE – RUAF – ND / Observatorio de Salud de Bogotá – SaludData
+    </p>
+
+    <div class="filtros">
+      <div class="filtro-grupo">
+        <label>Año</label>
+        <select class="filtro-select" id="filtro-anio-mort"></select>
+      </div>
+    </div>
+
+    <div class="kpis-row">
+      <div class="kpi-group">
+        <div class="kpi-group-title">Defunciones de jóvenes</div>
+        <div class="kpi-cards">
+          <div class="kpi-card mortalidad">
+            <div class="kpi-valor" id="kpi-mort-total">–</div>
+            <div class="kpi-label">Total fallecidos</div>
+          </div>
+          <div class="kpi-card mortalidad">
+            <div class="kpi-valor" id="kpi-mort-hombres">–</div>
+            <div class="kpi-label">Hombres</div>
+          </div>
+          <div class="kpi-card mortalidad">
+            <div class="kpi-valor" id="kpi-mort-mujeres">–</div>
+            <div class="kpi-label">Mujeres</div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-group">
+        <div class="kpi-group-title">Muertes según sexo</div>
+        <div class="chart-container" style="height:180px;">
+          <canvas id="chart-mort-sexo"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-title">Causas de muerte según lista 6/67</div>
+        <div class="chart-container" style="height:350px;">
+          <canvas id="chart-mort-causas"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Defunciones por localidad</div>
         <div class="chart-container" style="height:400px;">
-          <canvas id="chart-nat-localidad"></canvas>
+          <canvas id="chart-mort-localidad"></canvas>
         </div>
       </div>
     </div>
@@ -329,8 +303,8 @@
       <div class="footer-top">
         <div>
           Fuente: Observatorio de Salud de Bogotá – SaludData · DANE, Proyecciones CNPV 2018<br>
-          4.2: Discapacidad certificada · 4.3: Natalidad en jóvenes (madres 15-28 años)<br>
-          Nota: una persona puede tener más de un tipo de discapacidad.
+          4.2: Discapacidad certificada · 4.3: Natalidad (madres 15-29 años) · 4.4: Mortalidad (15-29 años)<br>
+          Nota: los datos de esta página corresponden a jóvenes entre 15 y 29 años.
         </div>
         <div style="text-align:right;">
           Secretaría de Integración Social<br>
@@ -353,114 +327,61 @@ function fmtDec(n, d=2) {
   return n.toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 
-// Escala secuencial rojo (claro → oscuro)
-const COLORES_DISC = [
-  '#d94f48', '#c0392b', '#b5302a', '#993322',
-  '#e07830', '#cc8844', '#884422'
-];
+const COLORES_DISC = ['#d94f48','#c0392b','#b5302a','#993322','#e07830','#cc8844','#884422'];
 
 // ============================================================
-// SECCIÓN 4.2: Discapacidad
+// 4.2 Discapacidad
 // ============================================================
-let DISC = null;
-let chartDiscTipo = null;
-let chartDiscLoc = null;
+let DISC = null, chartDiscTipo = null, chartDiscLoc = null;
 
 fetch('data/discapacidad.json')
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(datos => {
-    DISC = datos;
-    renderDiscapacidad();
-  })
-  .catch(err => console.warn('No se pudo cargar discapacidad.json:', err));
+  .then(d => { DISC = d; renderDisc(); })
+  .catch(err => console.warn('discapacidad.json:', err));
 
-function renderDiscapacidad() {
-  // KPI
+function renderDisc() {
   document.getElementById('kpi-total-disc').textContent = fmtNum(DISC.total_jovenes_discapacidad);
 
-  // Gráfico por tipo (barras horizontales)
   const tipos = DISC.por_tipo;
   if (chartDiscTipo) chartDiscTipo.destroy();
   chartDiscTipo = new Chart(document.getElementById('chart-disc-tipo'), {
     type: 'bar',
     data: {
       labels: tipos.map(t => t.nombre),
-      datasets: [{
-        data: tipos.map(t => t.cantidad),
-        backgroundColor: COLORES_DISC.slice(0, tipos.length),
-        borderRadius: 4,
-      }]
+      datasets: [{ data: tipos.map(t => t.cantidad), backgroundColor: COLORES_DISC, borderRadius: 4 }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' jóvenes' }
-        }
-      },
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' jóvenes' } } },
       scales: {
-        x: {
-          ticks: { callback: v => fmtNum(v), font: { size: 10 } },
-          grid: { color: '#ecf0f1' }
-        },
+        x: { ticks: { callback: v => fmtNum(v), font: { size: 10 } }, grid: { color: '#ecf0f1' } },
         y: { ticks: { font: { size: 10 } }, grid: { display: false } }
       }
     },
     plugins: [{
-      id: 'barLabelsDisc',
-      afterDatasetsDraw(chart) {
+      id: 'bl', afterDatasetsDraw(chart) {
         const ctx = chart.ctx;
-        chart.data.datasets[0].data.forEach((val, i) => {
-          const meta = chart.getDatasetMeta(0).data[i];
-          const x = meta.x - 8;
-          const y = meta.y;
-          ctx.save();
-          ctx.fillStyle = '#fff';
-          ctx.font = 'bold 11px Segoe UI, system-ui, sans-serif';
-          ctx.textAlign = 'right';
-          ctx.textBaseline = 'middle';
-          // Solo mostrar label si la barra es suficientemente ancha
-          const barWidth = meta.x - meta.base;
-          if (barWidth > 50) {
-            ctx.fillText(fmtNum(val), x, y);
+        chart.getDatasetMeta(0).data.forEach((bar, i) => {
+          if (bar.x - bar.base > 50) {
+            ctx.save(); ctx.fillStyle='#fff'; ctx.font='bold 11px Segoe UI,system-ui,sans-serif';
+            ctx.textAlign='right'; ctx.textBaseline='middle';
+            ctx.fillText(fmtNum(chart.data.datasets[0].data[i]), bar.x-8, bar.y); ctx.restore();
           }
-          ctx.restore();
         });
       }
     }]
   });
 
-  // Gráfico por localidad (barras horizontales)
   const locs = DISC.por_localidad;
   if (chartDiscLoc) chartDiscLoc.destroy();
   chartDiscLoc = new Chart(document.getElementById('chart-disc-localidad'), {
     type: 'bar',
-    data: {
-      labels: locs.map(l => l.localidad),
-      datasets: [{
-        data: locs.map(l => l.cantidad),
-        backgroundColor: '#b5302a',
-        borderRadius: 3,
-      }]
-    },
+    data: { labels: locs.map(l => l.localidad), datasets: [{ data: locs.map(l => l.cantidad), backgroundColor: '#b5302a', borderRadius: 3 }] },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' jóvenes' }
-        }
-      },
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' jóvenes' } } },
       scales: {
-        x: {
-          ticks: { callback: v => fmtNum(v), font: { size: 10 } },
-          grid: { color: '#ecf0f1' }
-        },
+        x: { ticks: { callback: v => fmtNum(v), font: { size: 10 } }, grid: { color: '#ecf0f1' } },
         y: { ticks: { font: { size: 10 } }, grid: { display: false } }
       }
     }
@@ -468,23 +389,16 @@ function renderDiscapacidad() {
 }
 
 // ============================================================
-// SECCIÓN 4.3: Natalidad
+// 4.3 Natalidad (azules)
 // ============================================================
-let NAT = null;
-let chartNatGrupos = null;
-let chartNatHist = null;
-let chartNatLoc = null;
+let NAT = null, chartNatGrupos = null, chartNatHist = null, mapNat = null, geoLayer = null;
 
 fetch('data/natalidad.json')
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(datos => {
-    NAT = datos;
-    initFiltrosNat();
-    actualizarNat();
-  })
-  .catch(err => console.warn('No se pudo cargar natalidad.json:', err));
+  .then(d => { NAT = d; initNat(); actualizarNat(); })
+  .catch(err => console.warn('natalidad.json:', err));
 
-function initFiltrosNat() {
+function initNat() {
   const sel = document.getElementById('filtro-anio-nat');
   const anios = NAT.por_anio.map(d => d.anio).sort();
   anios.forEach(a => {
@@ -497,213 +411,264 @@ function initFiltrosNat() {
   document.getElementById('filtro-grupo-nat').onchange = actualizarNat;
 }
 
-function getAnioNat() {
-  return parseInt(document.getElementById('filtro-anio-nat').value);
-}
-function getGrupoNat() {
-  return document.getElementById('filtro-grupo-nat').value;
-}
-
 function actualizarNat() {
-  const anio = getAnioNat();
-  const grupo = getGrupoNat();
-  actualizarKPIsNat(anio, grupo);
-  actualizarChartGrupos(anio);
-  actualizarChartHistNat(grupo);
-  actualizarChartLocNat();
-}
-
-function actualizarKPIsNat(anio, grupo) {
+  const anio = parseInt(document.getElementById('filtro-anio-nat').value);
+  const grupo = document.getElementById('filtro-grupo-nat').value;
   const d = NAT.por_anio.find(r => r.anio === anio);
   if (!d) return;
 
+  // KPIs
   let tasa, nacidos;
-  if (grupo === 'total') {
-    tasa = d.tasa_total;
-    nacidos = d.nacidos_total;
-  } else if (grupo === '15_19') {
-    tasa = d.tasa_15_19;
-    nacidos = d.nacidos_15_19;
-  } else if (grupo === '20_24') {
-    tasa = d.tasa_20_24;
-    nacidos = d.nacidos_20_24;
-  } else {
-    tasa = d.tasa_25_28;
-    nacidos = d.nacidos_25_28;
-  }
-
+  if (grupo === 'total') { tasa = d.tasa_total; nacidos = d.nacidos_total; }
+  else if (grupo === '15_19') { tasa = d.tasa_15_19; nacidos = d.nacidos_15_19; }
+  else if (grupo === '20_24') { tasa = d.tasa_20_24; nacidos = d.nacidos_20_24; }
+  else { tasa = d.tasa_25_29; nacidos = d.nacidos_25_29; }
   document.getElementById('kpi-tasa-nat').textContent = tasa != null ? fmtDec(tasa, 1) + ' ‰' : '–';
   document.getElementById('kpi-nacidos').textContent = fmtNum(nacidos);
-}
 
-function actualizarChartGrupos(anio) {
-  const d = NAT.por_anio.find(r => r.anio === anio);
-  if (!d) return;
-
+  // Barras grupo edad
   const grupos = [
-    { label: '15 a 19', val: d.nacidos_15_19, color: '#d94f48' },
-    { label: '20 a 24', val: d.nacidos_20_24, color: '#b5302a' },
-    { label: '25 a 28', val: d.nacidos_25_28, color: '#8c2420' },
+    { label: '15 a 19', val: d.nacidos_15_19, color: '#7fb3e0' },
+    { label: '20 a 24', val: d.nacidos_20_24, color: '#3a7fc1' },
+    { label: '25 a 29', val: d.nacidos_25_29, color: '#1a4a7a' },
   ];
-
   if (chartNatGrupos) chartNatGrupos.destroy();
   chartNatGrupos = new Chart(document.getElementById('chart-nat-grupos'), {
     type: 'bar',
-    data: {
-      labels: grupos.map(g => g.label),
-      datasets: [{
-        data: grupos.map(g => g.val),
-        backgroundColor: grupos.map(g => g.color),
-        borderRadius: 4,
-      }]
-    },
+    data: { labels: grupos.map(g => g.label), datasets: [{ data: grupos.map(g => g.val), backgroundColor: grupos.map(g => g.color), borderRadius: 4 }] },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' nacidos' }
-        }
-      },
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' nacidos' } } },
       scales: {
-        x: {
-          ticks: { callback: v => fmtNum(v), font: { size: 10 } },
-          grid: { color: '#ecf0f1' }
-        },
+        x: { ticks: { callback: v => fmtNum(v), font: { size: 10 } }, grid: { color: '#ecf0f1' } },
         y: { ticks: { font: { size: 11 } }, grid: { display: false } }
       }
     },
     plugins: [{
-      id: 'barLabelsGrupos',
-      afterDatasetsDraw(chart) {
+      id: 'blg', afterDatasetsDraw(chart) {
         const ctx = chart.ctx;
-        chart.data.datasets[0].data.forEach((val, i) => {
-          const meta = chart.getDatasetMeta(0).data[i];
-          const barWidth = meta.x - meta.base;
-          if (barWidth > 50) {
-            ctx.save();
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 11px Segoe UI, system-ui, sans-serif';
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(fmtNum(val), meta.x - 8, meta.y);
-            ctx.restore();
+        chart.getDatasetMeta(0).data.forEach((bar, i) => {
+          if (bar.x - bar.base > 50) {
+            ctx.save(); ctx.fillStyle='#fff'; ctx.font='bold 11px Segoe UI,system-ui,sans-serif';
+            ctx.textAlign='right'; ctx.textBaseline='middle';
+            ctx.fillText(fmtNum(chart.data.datasets[0].data[i]), bar.x-8, bar.y); ctx.restore();
           }
         });
       }
     }]
   });
-}
 
-function actualizarChartHistNat(grupo) {
-  const datos = NAT.por_anio;
-
-  // Seleccionar campo según grupo
+  // Histórico
   let campos;
   if (grupo === 'total') {
     campos = [
-      { label: '15 a 19 años', key: 'tasa_15_19', color: '#d94f48' },
-      { label: '20 a 24 años', key: 'tasa_20_24', color: '#b5302a' },
-      { label: '25 a 28 años', key: 'tasa_25_28', color: '#8c2420' },
+      { label: '15 a 19 años', key: 'tasa_15_19', color: '#7fb3e0' },
+      { label: '20 a 24 años', key: 'tasa_20_24', color: '#3a7fc1' },
+      { label: '25 a 29 años', key: 'tasa_25_29', color: '#1a4a7a' },
     ];
   } else {
     const map = {
-      '15_19': { label: '15 a 19 años', key: 'tasa_15_19', color: '#d94f48' },
-      '20_24': { label: '20 a 24 años', key: 'tasa_20_24', color: '#b5302a' },
-      '25_28': { label: '25 a 28 años', key: 'tasa_25_28', color: '#8c2420' },
+      '15_19': { label: '15 a 19 años', key: 'tasa_15_19', color: '#7fb3e0' },
+      '20_24': { label: '20 a 24 años', key: 'tasa_20_24', color: '#3a7fc1' },
+      '25_29': { label: '25 a 29 años', key: 'tasa_25_29', color: '#1a4a7a' },
     };
     campos = [map[grupo]];
   }
-
   if (chartNatHist) chartNatHist.destroy();
   chartNatHist = new Chart(document.getElementById('chart-nat-historico'), {
     type: 'line',
     data: {
-      labels: datos.map(d => d.anio),
+      labels: NAT.por_anio.map(d => d.anio),
       datasets: campos.map(c => ({
-        label: c.label,
-        data: datos.map(d => d[c.key]),
-        borderColor: c.color,
-        backgroundColor: c.color,
-        borderWidth: 2.5,
-        pointRadius: 4,
-        pointBackgroundColor: c.color,
-        tension: 0.3,
+        label: c.label, data: NAT.por_anio.map(d => d[c.key]),
+        borderColor: c.color, backgroundColor: c.color,
+        borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: c.color, tension: 0.3,
       }))
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: {
-          position: 'top',
-          labels: { usePointStyle: true, pointStyle: 'circle', font: { size: 11 } }
-        },
-        tooltip: {
-          callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtDec(ctx.parsed.y, 1) + ' ‰' }
-        }
+        legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtDec(ctx.parsed.y, 1) + ' ‰' } }
       },
       scales: {
-        y: {
-          ticks: {
-            callback: v => fmtDec(v, 0) + ' ‰',
-            font: { size: 11 }
-          },
-          grid: { color: '#ecf0f1' }
-        },
+        y: { ticks: { callback: v => fmtDec(v, 0) + ' ‰', font: { size: 11 } }, grid: { color: '#ecf0f1' } },
         x: { ticks: { font: { size: 11 } }, grid: { display: false } }
       }
     }
   });
+
+  // Mapa
+  renderMapaNat();
 }
 
-function actualizarChartLocNat() {
-  const locs = NAT.por_localidad;
-  if (!locs || locs.length === 0) return;
+// Mapa coroplético de natalidad por localidad
+function renderMapaNat() {
+  if (!NAT.por_localidad || NAT.por_localidad.length === 0) return;
 
-  if (chartNatLoc) chartNatLoc.destroy();
-  chartNatLoc = new Chart(document.getElementById('chart-nat-localidad'), {
+  if (!mapNat) {
+    mapNat = L.map('map-natalidad', { zoomControl: true, attributionControl: false });
+    mapNat.setView([4.65, -74.1], 10);
+  }
+  if (geoLayer) mapNat.removeLayer(geoLayer);
+
+  // Crear lookup de tasa por nombre de localidad
+  const tasaMap = {};
+  NAT.por_localidad.forEach(l => {
+    tasaMap[l.localidad.toUpperCase()] = l;
+  });
+
+  fetch('data/localidades.geojson')
+    .then(r => r.json())
+    .then(geo => {
+      // Encontrar min/max para escala de color
+      const tasas = NAT.por_localidad.map(l => l.tasa_por_mil).filter(t => t != null);
+      const minT = Math.min(...tasas);
+      const maxT = Math.max(...tasas);
+
+      geoLayer = L.geoJSON(geo, {
+        style: function(feature) {
+          const nombre = feature.properties.nombre.toUpperCase();
+          // Buscar coincidencia flexible
+          let dato = tasaMap[nombre];
+          if (!dato) {
+            // Intentar sin tildes
+            for (const key in tasaMap) {
+              if (nombre.includes(key.substring(0, 5)) || key.includes(nombre.substring(0, 5))) {
+                dato = tasaMap[key]; break;
+              }
+            }
+          }
+          const tasa = dato ? dato.tasa_por_mil : 0;
+          const t = maxT > minT ? (tasa - minT) / (maxT - minT) : 0.5;
+          // Escala azul claro → azul oscuro
+          const r = Math.round(200 - t * 150);
+          const g = Math.round(220 - t * 140);
+          const b = Math.round(240 - t * 80);
+          return {
+            fillColor: `rgb(${r},${g},${b})`,
+            weight: 1.5,
+            color: '#fff',
+            fillOpacity: 0.85,
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          const nombre = feature.properties.nombre;
+          const nombreUp = nombre.toUpperCase();
+          let dato = tasaMap[nombreUp];
+          if (!dato) {
+            for (const key in tasaMap) {
+              if (nombreUp.includes(key.substring(0, 5)) || key.includes(nombreUp.substring(0, 5))) {
+                dato = tasaMap[key]; break;
+              }
+            }
+          }
+          const tasa = dato ? fmtDec(dato.tasa_por_mil, 1) + ' ‰' : 'N/D';
+          const nac = dato ? fmtNum(dato.nacidos) : 'N/D';
+          layer.bindTooltip(
+            `<strong>${nombre}</strong><br>Tasa: ${tasa}<br>Nacidos: ${nac}`,
+            { sticky: true }
+          );
+        }
+      }).addTo(mapNat);
+
+      mapNat.fitBounds(geoLayer.getBounds(), { padding: [10, 10] });
+    })
+    .catch(err => console.warn('localidades.geojson:', err));
+}
+
+// ============================================================
+// 4.4 Mortalidad
+// ============================================================
+let MORT = null, chartMortSexo = null, chartMortCausas = null, chartMortLoc = null;
+
+fetch('data/mortalidad.json')
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(d => { MORT = d; initMort(); actualizarMort(); })
+  .catch(err => console.warn('mortalidad.json:', err));
+
+function initMort() {
+  const sel = document.getElementById('filtro-anio-mort');
+  const anios = MORT.por_anio.map(d => d.anio).sort();
+  anios.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a; opt.textContent = a;
+    if (a === Math.max(...anios)) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.onchange = actualizarMort;
+}
+
+function actualizarMort() {
+  const anio = parseInt(document.getElementById('filtro-anio-mort').value);
+  const d = MORT.por_anio.find(r => r.anio === anio);
+  if (!d) return;
+
+  // KPIs
+  document.getElementById('kpi-mort-total').textContent = fmtNum(d.total);
+  document.getElementById('kpi-mort-hombres').textContent = fmtNum(d.hombres);
+  document.getElementById('kpi-mort-mujeres').textContent = fmtNum(d.mujeres);
+
+  // Donut sexo
+  const pctH = d.total > 0 ? (d.hombres / d.total * 100).toFixed(1) : 0;
+  const pctM = d.total > 0 ? (d.mujeres / d.total * 100).toFixed(1) : 0;
+  if (chartMortSexo) chartMortSexo.destroy();
+  chartMortSexo = new Chart(document.getElementById('chart-mort-sexo'), {
+    type: 'doughnut',
+    data: {
+      labels: [`Hombre ${fmtNum(d.hombres)} (${pctH}%)`, `Mujer ${fmtNum(d.mujeres)} (${pctM}%)`],
+      datasets: [{ data: [d.hombres, d.mujeres], backgroundColor: ['#b5302a', '#e8a030'], borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' } },
+      }
+    }
+  });
+
+  // Causas (barras horizontales)
+  const causas = d.top_causas;
+  if (chartMortCausas) chartMortCausas.destroy();
+  chartMortCausas = new Chart(document.getElementById('chart-mort-causas'), {
+    type: 'bar',
+    data: {
+      labels: causas.map(c => c.causa.length > 40 ? c.causa.substring(0, 37) + '...' : c.causa),
+      datasets: [{ data: causas.map(c => c.casos), backgroundColor: '#b5302a', borderRadius: 3 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        title: ctx => causas[ctx[0].dataIndex].causa,
+        label: ctx => fmtNum(ctx.parsed.x) + ' defunciones'
+      } } },
+      scales: {
+        x: { ticks: { callback: v => fmtNum(v), font: { size: 10 } }, grid: { color: '#ecf0f1' } },
+        y: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Localidades
+  const locs = d.por_localidad;
+  if (chartMortLoc) chartMortLoc.destroy();
+  chartMortLoc = new Chart(document.getElementById('chart-mort-localidad'), {
     type: 'bar',
     data: {
       labels: locs.map(l => l.localidad),
-      datasets: [{
-        data: locs.map(l => l.tasa_por_mil),
-        backgroundColor: '#b5302a',
-        borderRadius: 3,
-      }]
+      datasets: [{ data: locs.map(l => l.casos), backgroundColor: '#e07830', borderRadius: 3 }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const loc = locs[ctx.dataIndex];
-              return fmtDec(ctx.parsed.x, 1) + ' ‰ (' + fmtNum(loc.nacidos) + ' nacidos)';
-            }
-          }
-        }
-      },
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtNum(ctx.parsed.x) + ' defunciones' } } },
       scales: {
-        x: {
-          ticks: {
-            callback: v => fmtDec(v, 0) + ' ‰',
-            font: { size: 10 }
-          },
-          grid: { color: '#ecf0f1' }
-        },
+        x: { ticks: { callback: v => fmtNum(v), font: { size: 10 } }, grid: { color: '#ecf0f1' } },
         y: { ticks: { font: { size: 10 } }, grid: { display: false } }
       }
     }
   });
 }
 </script>
-
 </body>
 </html>

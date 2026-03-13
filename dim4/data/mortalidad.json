@@ -1,0 +1,895 @@
+{
+  "por_anio": [
+    {
+      "anio": 2018,
+      "total": 1668,
+      "hombres": 1261,
+      "mujeres": 407,
+      "top_causas": [
+        {
+          "causa": "Agresiones (homicidios)",
+          "casos": 532
+        },
+        {
+          "causa": "Accidentes de transporte terrestre",
+          "casos": 241
+        },
+        {
+          "causa": "Lesiones autoinflingidas intencionalmente (suicidios)",
+          "casos": 160
+        },
+        {
+          "causa": "Signos, síntomas y afecciones mal definidas",
+          "casos": 63
+        },
+        {
+          "causa": "Enfermedades del sistema nervioso, excepto meningitis",
+          "casos": 60
+        },
+        {
+          "causa": "Tumores malignos de otras localizaciones y de las no especificadas",
+          "casos": 58
+        },
+        {
+          "causa": "Eventos de intención no determinada",
+          "casos": 52
+        },
+        {
+          "causa": "Enfermedad por VIH (SIDA)",
+          "casos": 51
+        },
+        {
+          "causa": "Leucemia",
+          "casos": 50
+        },
+        {
+          "causa": "Resto de enfermedades",
+          "casos": 49
+        }
+      ],
+      "por_localidad": [
+        {
+          "localidad": "Ciudad Bolívar",
+          "casos": 231
+        },
+        {
+          "localidad": "Kennedy",
+          "casos": 224
+        },
+        {
+          "localidad": "Suba",
+          "casos": 165
+        },
+        {
+          "localidad": "Bosa",
+          "casos": 148
+        },
+        {
+          "localidad": "Engativá",
+          "casos": 115
+        },
+        {
+          "localidad": "Usme",
+          "casos": 115
+        },
+        {
+          "localidad": "Rafael Uribe Uribe",
+          "casos": 109
+        },
+        {
+          "localidad": "San Cristóbal",
+          "casos": 96
+        },
+        {
+          "localidad": "Usaquén",
+          "casos": 70
+        },
+        {
+          "localidad": "Puente Aranda",
+          "casos": 48
+        },
+        {
+          "localidad": "Tunjuelito",
+          "casos": 43
+        },
+        {
+          "localidad": "Fontibón",
+          "casos": 37
+        },
+        {
+          "localidad": "Chapinero",
+          "casos": 33
+        },
+        {
+          "localidad": "Santa Fe",
+          "casos": 30
+        },
+        {
+          "localidad": "Los Mártires",
+          "casos": 29
+        },
+        {
+          "localidad": "Teusaquillo",
+          "casos": 28
+        },
+        {
+          "localidad": "Barrios Unidos",
+          "casos": 12
+        },
+        {
+          "localidad": "Antonio Nariño",
+          "casos": 10
+        },
+        {
+          "localidad": "La Candelaria",
+          "casos": 5
+        }
+      ]
+    },
+    {
+      "anio": 2019,
+      "total": 1738,
+      "hombres": 1280,
+      "mujeres": 458,
+      "top_causas": [
+        {
+          "causa": "Agresiones (homicidios)",
+          "casos": 500
+        },
+        {
+          "causa": "Accidentes de transporte terrestre",
+          "casos": 242
+        },
+        {
+          "causa": "Lesiones autoinflingidas intencionalmente (suicidios)",
+          "casos": 182
+        },
+        {
+          "causa": "Enfermedad por VIH (SIDA)",
+          "casos": 71
+        },
+        {
+          "causa": "Enfermedades del sistema nervioso, excepto meningitis",
+          "casos": 63
+        },
+        {
+          "causa": "Eventos de intención determinada",
+          "casos": 63
+        },
+        {
+          "causa": "Resto de enfermedades",
+          "casos": 60
+        },
+        {
+          "causa": "Sigs, síntomas y afecciones mal definidas",
+          "casos": 59
+        },
+        {
+          "causa": "Tumores maligs de otras localizaciones y de las especificadas",
+          "casos": 55
+        },
+        {
+          "causa": "Leucemia",
+          "casos": 40
+        }
+      ],
+      "por_localidad": [
+        {
+          "localidad": "Kennedy",
+          "casos": 211
+        },
+        {
+          "localidad": "Ciudad Bolívar",
+          "casos": 205
+        },
+        {
+          "localidad": "Suba",
+          "casos": 204
+        },
+        {
+          "localidad": "Bosa",
+          "casos": 172
+        },
+        {
+          "localidad": "Engativá",
+          "casos": 136
+        },
+        {
+          "localidad": "Rafael Uribe Uribe",
+          "casos": 104
+        },
+        {
+          "localidad": "Usme",
+          "casos": 104
+        },
+        {
+          "localidad": "San Cristóbal",
+          "casos": 83
+        },
+        {
+          "localidad": "Usaquén",
+          "casos": 72
+        },
+        {
+          "localidad": "Fontibón",
+          "casos": 64
+        },
+        {
+          "localidad": "Puente Aranda",
+          "casos": 50
+        },
+        {
+          "localidad": "Santa Fe",
+          "casos": 45
+        },
+        {
+          "localidad": "Chapinero",
+          "casos": 40
+        },
+        {
+          "localidad": "Teusaquillo",
+          "casos": 38
+        },
+        {
+          "localidad": "Tunjuelito",
+          "casos": 38
+        },
+        {
+          "localidad": "Barrios Unidos",
+          "casos": 32
+        },
+        {
+          "localidad": "Los Mártires",
+          "casos": 27
+        },
+        {
+          "localidad": "Antonio Nariño",
+          "casos": 11
+        },
+        {
+          "localidad": "La Candelaria",
+          "casos": 4
+        },
+        {
+          "localidad": "Sumapaz",
+          "casos": 2
+        }
+      ]
+    },
+    {
+      "anio": 2020,
+      "total": 1630,
+      "hombres": 1212,
+      "mujeres": 418,
+      "top_causas": [
+        {
+          "causa": "Agresiones (homicidios)",
+          "casos": 516
+        },
+        {
+          "causa": "Accidentes de transporte terrestre",
+          "casos": 183
+        },
+        {
+          "causa": "Lesiones autoinflingidas intencionalmente (suicidios)",
+          "casos": 138
+        },
+        {
+          "causa": "Resto de ciertas enfermedades infecciosas y parasitarias",
+          "casos": 108
+        },
+        {
+          "causa": "Enfermedades del sistema nervioso, excepto meningitis",
+          "casos": 64
+        },
+        {
+          "causa": "Tumores malignos de otras localizaciones y de las no especificadas",
+          "casos": 63
+        },
+        {
+          "causa": "Enfermedad por VIH (SIDA)",
+          "casos": 60
+        },
+        {
+          "causa": "Eventos de intención no determinada",
+          "casos": 54
+        },
+        {
+          "causa": "Resto de enfermedades",
+          "casos": 42
+        },
+        {
+          "causa": "Signos, síntomas y afecciones mal definida",
+          "casos": 38
+        }
+      ],
+      "por_localidad": [
+        {
+          "localidad": "Kennedy",
+          "casos": 230
+        },
+        {
+          "localidad": "Ciudad Bolívar",
+          "casos": 212
+        },
+        {
+          "localidad": "Suba",
+          "casos": 188
+        },
+        {
+          "localidad": "Bosa",
+          "casos": 158
+        },
+        {
+          "localidad": "Engativá",
+          "casos": 125
+        },
+        {
+          "localidad": "San Cristóbal",
+          "casos": 98
+        },
+        {
+          "localidad": "Usme",
+          "casos": 94
+        },
+        {
+          "localidad": "Rafael Uribe Uribe",
+          "casos": 87
+        },
+        {
+          "localidad": "Usaquén",
+          "casos": 83
+        },
+        {
+          "localidad": "Fontibón",
+          "casos": 49
+        },
+        {
+          "localidad": "Puente Aranda",
+          "casos": 38
+        },
+        {
+          "localidad": "Tunjuelito",
+          "casos": 38
+        },
+        {
+          "localidad": "Santa Fe",
+          "casos": 36
+        },
+        {
+          "localidad": "Chapinero",
+          "casos": 25
+        },
+        {
+          "localidad": "Los Mártires",
+          "casos": 25
+        },
+        {
+          "localidad": "Antonio Nariño",
+          "casos": 19
+        },
+        {
+          "localidad": "Teusaquillo",
+          "casos": 18
+        },
+        {
+          "localidad": "Barrios Unidos",
+          "casos": 17
+        },
+        {
+          "localidad": "La Candelaria",
+          "casos": 2
+        }
+      ]
+    },
+    {
+      "anio": 2021,
+      "total": 1838,
+      "hombres": 1389,
+      "mujeres": 449,
+      "top_causas": [
+        {
+          "causa": "Agresiones (homicidios)",
+          "casos": 584
+        },
+        {
+          "causa": "Accidentes de transporte terrestre",
+          "casos": 221
+        },
+        {
+          "causa": "Resto de ciertas enfermedades infecciosas y parasitarias",
+          "casos": 169
+        },
+        {
+          "causa": "Lesiones autoinflingidas intencionalmente (suicidios)",
+          "casos": 157
+        },
+        {
+          "causa": "Enfermedades del sistema nervioso, excepto meningitis",
+          "casos": 63
+        },
+        {
+          "causa": "Enfermedad por VIH (SIDA)",
+          "casos": 53
+        },
+        {
+          "causa": "Signos, síntomas y afecciones mal definidas",
+          "casos": 50
+        },
+        {
+          "causa": "Eventos de intención no determinada",
+          "casos": 48
+        },
+        {
+          "causa": "Resto de enfermedades",
+          "casos": 44
+        },
+        {
+          "causa": "Tumores malignos de otras localizaciones y de las no especificadas",
+          "casos": 39
+        }
+      ],
+      "por_localidad": [
+        {
+          "localidad": "Kennedy",
+          "casos": 267
+        },
+        {
+          "localidad": "Ciudad Bolívar",
+          "casos": 233
+        },
+        {
+          "localidad": "Suba",
+          "casos": 218
+        },
+        {
+          "localidad": "Bosa",
+          "casos": 197
+        },
+        {
+          "localidad": "Engativá",
+          "casos": 140
+        },
+        {
+          "localidad": "San Cristóbal",
+          "casos": 124
+        },
+        {
+          "localidad": "Usme",
+          "casos": 112
+        },
+        {
+          "localidad": "Rafael Uribe Uribe",
+          "casos": 80
+        },
+        {
+          "localidad": "Fontibón",
+          "casos": 72
+        },
+        {
+          "localidad": "Usaquén",
+          "casos": 70
+        },
+        {
+          "localidad": "Puente Aranda",
+          "casos": 46
+        },
+        {
+          "localidad": "Santa Fe",
+          "casos": 45
+        },
+        {
+          "localidad": "Tunjuelito",
+          "casos": 38
+        },
+        {
+          "localidad": "Los Mártires",
+          "casos": 34
+        },
+        {
+          "localidad": "Chapinero",
+          "casos": 25
+        },
+        {
+          "localidad": "Barrios Unidos",
+          "casos": 23
+        },
+        {
+          "localidad": "Antonio Nariño",
+          "casos": 21
+        },
+        {
+          "localidad": "Teusaquillo",
+          "casos": 17
+        },
+        {
+          "localidad": "La Candelaria",
+          "casos": 9
+        },
+        {
+          "localidad": "Sumapaz",
+          "casos": 1
+        }
+      ]
+    },
+    {
+      "anio": 2022,
+      "total": 1697,
+      "hombres": 1277,
+      "mujeres": 420,
+      "top_causas": [
+        {
+          "causa": "Agresiones (homicidios)",
+          "casos": 495
+        },
+        {
+          "causa": "Accidentes de transporte terrestre",
+          "casos": 242
+        },
+        {
+          "causa": "Lesiones autoinflingidas intencionalmente (suicidios)",
+          "casos": 201
+        },
+        {
+          "causa": "Enfermedades del sistema nervioso, excepto meningitis",
+          "casos": 81
+        },
+        {
+          "causa": "Signos, síntomas y afecciones mal definidas",
+          "casos": 70
+        },
+        {
+          "causa": "Eventos de intención no determinada",
+          "casos": 56
+        },
+        {
+          "causa": "Tumores malignos de otras localizaciones y de las no especificadas",
+          "casos": 47
+        },
+        {
+          "causa": "Resto de enfermedades",
+          "casos": 44
+        },
+        {
+          "causa": "Leucemia",
+          "casos": 43
+        },
+        {
+          "causa": "Enfermedad por VIH (SIDA)",
+          "casos": 42
+        }
+      ],
+      "por_localidad": [
+        {
+          "localidad": "Kennedy",
+          "casos": 237
+        },
+        {
+          "localidad": "Ciudad Bolívar",
+          "casos": 207
+        },
+        {
+          "localidad": "Suba",
+          "casos": 196
+        },
+        {
+          "localidad": "Bosa",
+          "casos": 146
+        },
+        {
+          "localidad": "Engativá",
+          "casos": 141
+        },
+        {
+          "localidad": "Usme",
+          "casos": 116
+        },
+        {
+          "localidad": "Rafael Uribe Uribe",
+          "casos": 114
+        },
+        {
+          "localidad": "San Cristóbal",
+          "casos": 93
+        },
+        {
+          "localidad": "Usaquén",
+          "casos": 83
+        },
+        {
+          "localidad": "Fontibón",
+          "casos": 66
+        },
+        {
+          "localidad": "Puente Aranda",
+          "casos": 41
+        },
+        {
+          "localidad": "Los Mártires",
+          "casos": 36
+        },
+        {
+          "localidad": "Santa Fe",
+          "casos": 34
+        },
+        {
+          "localidad": "Tunjuelito",
+          "casos": 34
+        },
+        {
+          "localidad": "Chapinero",
+          "casos": 29
+        },
+        {
+          "localidad": "Teusaquillo",
+          "casos": 26
+        },
+        {
+          "localidad": "Barrios Unidos",
+          "casos": 19
+        },
+        {
+          "localidad": "Antonio Nariño",
+          "casos": 15
+        },
+        {
+          "localidad": "La Candelaria",
+          "casos": 11
+        }
+      ]
+    },
+    {
+      "anio": 2023,
+      "total": 1666,
+      "hombres": 1258,
+      "mujeres": 408,
+      "top_causas": [
+        {
+          "causa": "Agresiones (homicidios)",
+          "casos": 491
+        },
+        {
+          "causa": "Accidentes de transporte terrestre",
+          "casos": 291
+        },
+        {
+          "causa": "Lesiones autoinflingidas intencionalmente (suicidios)",
+          "casos": 170
+        },
+        {
+          "causa": "Signos, síntomas y afecciones mal definidas",
+          "casos": 75
+        },
+        {
+          "causa": "Enfermedades del sistema nervioso, excepto meningitis",
+          "casos": 67
+        },
+        {
+          "causa": "Eventos de intención no determinada",
+          "casos": 63
+        },
+        {
+          "causa": "Tumores malignos de otras localizaciones y de las no especificadas",
+          "casos": 50
+        },
+        {
+          "causa": "Leucemia",
+          "casos": 43
+        },
+        {
+          "causa": "Resto de enfermedades",
+          "casos": 39
+        },
+        {
+          "causa": "Enfermedad por VIH (SIDA)",
+          "casos": 36
+        }
+      ],
+      "por_localidad": [
+        {
+          "localidad": "Kennedy",
+          "casos": 212
+        },
+        {
+          "localidad": "Ciudad Bolívar",
+          "casos": 198
+        },
+        {
+          "localidad": "Suba",
+          "casos": 187
+        },
+        {
+          "localidad": "Bosa",
+          "casos": 175
+        },
+        {
+          "localidad": "Engativá",
+          "casos": 139
+        },
+        {
+          "localidad": "Usme",
+          "casos": 113
+        },
+        {
+          "localidad": "San Cristóbal",
+          "casos": 99
+        },
+        {
+          "localidad": "Rafael Uribe Uribe",
+          "casos": 91
+        },
+        {
+          "localidad": "Usaquén",
+          "casos": 69
+        },
+        {
+          "localidad": "Fontibón",
+          "casos": 56
+        },
+        {
+          "localidad": "Santa Fe",
+          "casos": 48
+        },
+        {
+          "localidad": "Puente Aranda",
+          "casos": 43
+        },
+        {
+          "localidad": "Barrios Unidos",
+          "casos": 37
+        },
+        {
+          "localidad": "Tunjuelito",
+          "casos": 36
+        },
+        {
+          "localidad": "Chapinero",
+          "casos": 30
+        },
+        {
+          "localidad": "Los Mártires",
+          "casos": 28
+        },
+        {
+          "localidad": "Teusaquillo",
+          "casos": 21
+        },
+        {
+          "localidad": "Antonio Nariño",
+          "casos": 15
+        },
+        {
+          "localidad": "La Candelaria",
+          "casos": 7
+        }
+      ]
+    },
+    {
+      "anio": 2024,
+      "total": 1678,
+      "hombres": 1267,
+      "mujeres": 411,
+      "top_causas": [
+        {
+          "causa": "Agresiones (homicidios)",
+          "casos": 509
+        },
+        {
+          "causa": "Accidentes de transporte terrestre",
+          "casos": 313
+        },
+        {
+          "causa": "Lesiones autoinfligidas intencionalmente (suicidios)",
+          "casos": 155
+        },
+        {
+          "causa": "Enfermedades del sistema nervioso, excepto meningitis",
+          "casos": 80
+        },
+        {
+          "causa": "Tumores malignos de otras localizaciones y de las no especificadas",
+          "casos": 67
+        },
+        {
+          "causa": "Signos, síntomas y afecciones mal definidas",
+          "casos": 59
+        },
+        {
+          "causa": "Enfermedad por el VIH (SIDA)",
+          "casos": 45
+        },
+        {
+          "causa": "Infecciones respiratorias agudas",
+          "casos": 38
+        },
+        {
+          "causa": "Eventos de intención no determinada",
+          "casos": 35
+        },
+        {
+          "causa": "Leucemia",
+          "casos": 34
+        }
+      ],
+      "por_localidad": [
+        {
+          "localidad": "Ciudad Bolívar",
+          "casos": 232
+        },
+        {
+          "localidad": "Kennedy",
+          "casos": 218
+        },
+        {
+          "localidad": "Suba",
+          "casos": 181
+        },
+        {
+          "localidad": "Bosa",
+          "casos": 175
+        },
+        {
+          "localidad": "Engativá",
+          "casos": 127
+        },
+        {
+          "localidad": "Usme",
+          "casos": 102
+        },
+        {
+          "localidad": "San Cristóbal",
+          "casos": 86
+        },
+        {
+          "localidad": "Rafael Uribe Uribe",
+          "casos": 78
+        },
+        {
+          "localidad": "Usaquén",
+          "casos": 70
+        },
+        {
+          "localidad": "Fontibón",
+          "casos": 64
+        },
+        {
+          "localidad": "Santa Fe",
+          "casos": 51
+        },
+        {
+          "localidad": "Puente Aranda",
+          "casos": 39
+        },
+        {
+          "localidad": "Tunjuelito",
+          "casos": 36
+        },
+        {
+          "localidad": "Los Mártires",
+          "casos": 35
+        },
+        {
+          "localidad": "Chapinero",
+          "casos": 34
+        },
+        {
+          "localidad": "Barrios Unidos",
+          "casos": 27
+        },
+        {
+          "localidad": "Teusaquillo",
+          "casos": 20
+        },
+        {
+          "localidad": "Antonio Nariño",
+          "casos": 13
+        },
+        {
+          "localidad": "La Candelaria",
+          "casos": 4
+        }
+      ]
+    }
+  ],
+  "nota": "Defunciones de jóvenes 15-29 años residentes en Bogotá. Fuente: DANE-RUAF-ND / OSB SaludData."
+}

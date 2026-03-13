@@ -26,13 +26,13 @@ DATA_DIR = os.path.join(SCRIPT_DIR, 'data')
 
 # Rango de edad de madres jóvenes (política de juventud)
 EDAD_MIN = 14
-EDAD_MAX = 28
+EDAD_MAX = 29
 
 # Grupos quinquenales para el filtro del tablero
 GRUPOS_EDAD = [
     ('15 a 19 años', 15, 19),
     ('20 a 24 años', 20, 24),
-    ('25 a 28 años', 25, 28),
+    ('25 a 29 años', 25, 29),
 ]
 
 # Solo datos desde 2018 (corte de la política)
@@ -151,8 +151,8 @@ def asignar_grupo(edad):
         return '15-19'
     elif 20 <= edad <= 24:
         return '20-24'
-    elif 25 <= edad <= 28:
-        return '25-29'  # Se usa 25-29 del DANE aunque el rango real es 25-28
+    elif 25 <= edad <= 29:
+        return '25-29'
     return None
 
 
@@ -225,7 +225,7 @@ def generar_json(nacidos, nacidos_loc, poblacion):
             'nacidos_total': n['total'],
             'nacidos_15_19': n['15-19'],
             'nacidos_20_24': n['20-24'],
-            'nacidos_25_28': n['25-29'],
+            'nacidos_25_29': n['25-29'],
         }
 
         # Tasas por cada mil mujeres jóvenes
@@ -235,7 +235,7 @@ def generar_json(nacidos, nacidos_loc, poblacion):
         else:
             registro['tasa_total'] = None
 
-        for grupo, label in [('15-19', 'tasa_15_19'), ('20-24', 'tasa_20_24'), ('25-29', 'tasa_25_28')]:
+        for grupo, label in [('15-19', 'tasa_15_19'), ('20-24', 'tasa_20_24'), ('25-29', 'tasa_25_29')]:
             pob_g = pob.get(grupo, 0)
             if pob_g > 0:
                 registro[label] = round(n[grupo] / pob_g * 1000, 2)

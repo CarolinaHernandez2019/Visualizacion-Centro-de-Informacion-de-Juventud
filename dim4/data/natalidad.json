@@ -2,154 +2,172 @@
   "por_anio": [
     {
       "anio": 2018,
-      "nacidos_total": 52028,
+      "nacidos_total": 56189,
       "nacidos_15_19": 10642,
       "nacidos_20_24": 23309,
-      "nacidos_25_28": 18077,
-      "tasa_total": 52.4,
+      "nacidos_25_29": 22238,
+      "tasa_total": 56.59,
       "tasa_15_19": 37.36,
       "tasa_20_24": 65.21,
-      "tasa_25_28": 51.56
+      "tasa_25_29": 63.42
     },
     {
       "anio": 2019,
-      "nacidos_total": 50410,
+      "nacidos_total": 54646,
       "nacidos_15_19": 9598,
       "nacidos_20_24": 22664,
-      "nacidos_25_28": 18148,
-      "tasa_total": 50.21,
+      "nacidos_25_29": 22384,
+      "tasa_total": 54.43,
       "tasa_15_19": 34.37,
       "tasa_20_24": 62.92,
-      "tasa_25_28": 49.8
+      "tasa_25_29": 61.42
     },
     {
       "anio": 2020,
-      "nacidos_total": 46798,
+      "nacidos_total": 50757,
       "nacidos_15_19": 8388,
       "nacidos_20_24": 21080,
-      "nacidos_25_28": 17330,
-      "tasa_total": 46.5,
+      "nacidos_25_29": 21289,
+      "tasa_total": 50.43,
       "tasa_15_19": 30.65,
       "tasa_20_24": 59.11,
-      "tasa_25_28": 46.07
+      "tasa_25_29": 56.59
     },
     {
       "anio": 2021,
-      "nacidos_total": 37928,
+      "nacidos_total": 41357,
       "nacidos_15_19": 6460,
       "nacidos_20_24": 16550,
-      "nacidos_25_28": 14918,
-      "tasa_total": 38.07,
+      "nacidos_25_29": 18347,
+      "tasa_total": 41.51,
       "tasa_15_19": 24.19,
       "tasa_20_24": 47.79,
-      "tasa_25_28": 38.96
+      "tasa_25_29": 47.91
     },
     {
       "anio": 2022,
-      "nacidos_total": 35293,
+      "nacidos_total": 38750,
       "nacidos_15_19": 5709,
       "nacidos_20_24": 14653,
-      "nacidos_25_28": 14931,
-      "tasa_total": 36.03,
+      "nacidos_25_29": 18388,
+      "tasa_total": 39.56,
       "tasa_15_19": 21.92,
       "tasa_20_24": 43.92,
-      "tasa_25_28": 38.74
+      "tasa_25_29": 47.71
     },
     {
       "anio": 2023,
-      "nacidos_total": 32659,
+      "nacidos_total": 36038,
       "nacidos_15_19": 5128,
       "nacidos_20_24": 13702,
-      "nacidos_25_28": 13829,
-      "tasa_total": 33.98,
+      "nacidos_25_29": 17208,
+      "tasa_total": 37.49,
       "tasa_15_19": 20.12,
       "tasa_20_24": 42.6,
-      "tasa_25_28": 35.95
+      "tasa_25_29": 44.73
     },
     {
       "anio": 2024,
-      "nacidos_total": 29694,
+      "nacidos_total": 32993,
       "nacidos_15_19": 4353,
       "nacidos_20_24": 12556,
-      "nacidos_25_28": 12785,
-      "tasa_total": 31.59,
+      "nacidos_25_29": 16084,
+      "tasa_total": 35.1,
       "tasa_15_19": 17.37,
       "tasa_20_24": 40.63,
-      "tasa_25_28": 33.62
+      "tasa_25_29": 42.29
     }
   ],
   "por_localidad": [
     {
       "localidad": "Los Mártires",
-      "nacidos": 530,
+      "nacidos": 577,
       "poblacion_mujeres_jovenes": 12004,
-      "tasa_por_mil": 44.15
+      "tasa_por_mil": 48.07
     },
     {
       "localidad": "Santa Fe",
-      "nacidos": 563,
+      "nacidos": 616,
       "poblacion_mujeres_jovenes": 13386,
-      "tasa_por_mil": 42.06
+      "tasa_por_mil": 46.02
     },
     {
       "localidad": "Rafael Uribe Uribe",
-      "nacidos": 1749,
+      "nacidos": 1921,
       "poblacion_mujeres_jovenes": 45777,
-      "tasa_por_mil": 38.21
+      "tasa_por_mil": 41.96
     },
     {
       "localidad": "Tunjuelito",
-      "nacidos": 784,
+      "nacidos": 854,
       "poblacion_mujeres_jovenes": 20696,
-      "tasa_por_mil": 37.88
+      "tasa_por_mil": 41.26
     },
     {
       "localidad": "Bosa",
-      "nacidos": 3529,
+      "nacidos": 3854,
       "poblacion_mujeres_jovenes": 94520,
-      "tasa_por_mil": 37.34
+      "tasa_por_mil": 40.77
     },
     {
       "localidad": "Usme",
-      "nacidos": 1904,
+      "nacidos": 2072,
       "poblacion_mujeres_jovenes": 51782,
-      "tasa_por_mil": 36.77
+      "tasa_por_mil": 40.01
     },
     {
       "localidad": "San Cristóbal",
-      "nacidos": 1769,
+      "nacidos": 1956,
       "poblacion_mujeres_jovenes": 50005,
-      "tasa_por_mil": 35.38
+      "tasa_por_mil": 39.12
     },
     {
       "localidad": "Kennedy",
-      "nacidos": 4302,
+      "nacidos": 4796,
       "poblacion_mujeres_jovenes": 122910,
-      "tasa_por_mil": 35.0
+      "tasa_por_mil": 39.02
     },
     {
       "localidad": "Antonio Nariño",
-      "nacidos": 318,
+      "nacidos": 353,
       "poblacion_mujeres_jovenes": 10330,
-      "tasa_por_mil": 30.78
+      "tasa_por_mil": 34.17
     },
     {
       "localidad": "Puente Aranda",
-      "nacidos": 758,
+      "nacidos": 855,
       "poblacion_mujeres_jovenes": 26993,
-      "tasa_por_mil": 28.08
+      "tasa_por_mil": 31.67
     },
     {
       "localidad": "La Candelaria",
-      "nacidos": 67,
+      "nacidos": 76,
       "poblacion_mujeres_jovenes": 2403,
-      "tasa_por_mil": 27.88
+      "tasa_por_mil": 31.63
+    },
+    {
+      "localidad": "Engativá",
+      "nacidos": 2729,
+      "poblacion_mujeres_jovenes": 94326,
+      "tasa_por_mil": 28.93
     },
     {
       "localidad": "Suba",
-      "nacidos": 3846,
+      "nacidos": 4331,
       "poblacion_mujeres_jovenes": 150975,
-      "tasa_por_mil": 25.47
+      "tasa_por_mil": 28.69
+    },
+    {
+      "localidad": "Barrios Unidos",
+      "nacidos": 442,
+      "poblacion_mujeres_jovenes": 15776,
+      "tasa_por_mil": 28.02
+    },
+    {
+      "localidad": "Fontibón",
+      "nacidos": 1239,
+      "poblacion_mujeres_jovenes": 47598,
+      "tasa_por_mil": 26.03
     },
     {
       "localidad": "Sumapaz",
@@ -158,44 +176,26 @@
       "tasa_por_mil": 25.46
     },
     {
-      "localidad": "Engativá",
-      "nacidos": 2401,
-      "poblacion_mujeres_jovenes": 94326,
-      "tasa_por_mil": 25.45
-    },
-    {
-      "localidad": "Barrios Unidos",
-      "nacidos": 384,
-      "poblacion_mujeres_jovenes": 15776,
-      "tasa_por_mil": 24.34
-    },
-    {
-      "localidad": "Fontibón",
-      "nacidos": 1094,
-      "poblacion_mujeres_jovenes": 47598,
-      "tasa_por_mil": 22.98
-    },
-    {
       "localidad": "Usaquén",
-      "nacidos": 1342,
+      "nacidos": 1544,
       "poblacion_mujeres_jovenes": 61367,
-      "tasa_por_mil": 21.87
+      "tasa_por_mil": 25.16
     },
     {
       "localidad": "Chapinero",
-      "nacidos": 312,
+      "nacidos": 370,
       "poblacion_mujeres_jovenes": 18135,
-      "tasa_por_mil": 17.2
+      "tasa_por_mil": 20.4
     },
     {
       "localidad": "Teusaquillo",
-      "nacidos": 228,
+      "nacidos": 274,
       "poblacion_mujeres_jovenes": 18313,
-      "tasa_por_mil": 12.45
+      "tasa_por_mil": 14.96
     },
     {
       "localidad": "Ciudad Bolívar",
-      "nacidos": 3803,
+      "nacidos": 4123,
       "poblacion_mujeres_jovenes": 0,
       "tasa_por_mil": null
     }

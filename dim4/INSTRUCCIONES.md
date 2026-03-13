@@ -7,6 +7,7 @@
 | 4.1 SGSSS | Afiliación por régimen | Pendiente — datos no disponibles aún | – | – |
 | 4.2 Discapacidad | Jóvenes con discapacidad certificada por tipo | OSB – SaludData | `fuentes/discapacidad/` | Por definir |
 | 4.3 Natalidad | Tasa de natalidad por cada mil en jóvenes | OSB – SaludData + DANE proyecciones | `fuentes/natalidad/` | Anual |
+| 4.4 Mortalidad | Defunciones de jóvenes 15-29 por causa y localidad | DANE-RUAF-ND / OSB SaludData | `fuentes/mortalidad/` | Anual |
 
 ---
 
@@ -44,7 +45,7 @@
 **Fuente nacimientos:** Observatorio de Salud de Bogotá – SaludData (Natalidad)
 **Fuente población:** DANE – Proyecciones CNPV 2018 por localidad y grupo quinquenal
 
-**Nota:** La tasa se calcula como: nacidos vivos de madres 15-28 / mujeres 15-29 × 1.000. Se usa el grupo quinquenal 25-29 del DANE como proxy del rango 25-28 de la política.
+**Nota:** La tasa se calcula como: nacidos vivos de madres 15-29 / mujeres 15-29 × 1.000. Los grupos quinquenales son 15-19, 20-24 y 25-29.
 
 ### Cómo actualizar
 
@@ -78,25 +79,60 @@ pip install openpyxl
 
 ---
 
+## 4.4 Mortalidad
+
+**Fuente:** DANE – RUAF-ND / Observatorio de Salud de Bogotá – SaludData
+
+**Nota:** Defunciones de jóvenes residentes en Bogotá, edades 15-29 años (grupos quinquenales 15-19, 20-24, 25-29). Causas clasificadas según Lista 6/67.
+
+### Cómo actualizar
+
+1. Descargar el CSV de mortalidad actualizado de SaludData
+2. Guardarlo en `dim4/fuentes/mortalidad/` (no borrar el anterior)
+3. Ejecutar:
+   ```bash
+   python dim4/actualizar_mortalidad.py
+   ```
+4. Subir a GitHub:
+   ```bash
+   git add dim4/fuentes/ dim4/data/
+   git commit -m "Actualizar datos de mortalidad"
+   git push
+   ```
+
+### Notas sobre los datos
+
+- El CSV usa separador `;` y codificación UTF-8 con BOM
+- Columnas clave: `ANO`, `EDAD_QUINQUENAL`, `SEXO`, `CAUSAS_667`, `LOCALIDAD`, `TOTAL_CASOS`
+- Se filtran datos desde 2018 (corte de la política)
+- El script genera top 10 causas de muerte y desglose por localidad para cada año
+
+---
+
 ## Verificar después de actualizar
 
 - Ir a: https://sdis-juventud.github.io/tablero-cij/dim4/
-- Revisar que las dos secciones (4.2 y 4.3) muestren datos correctos
+- Revisar que las cuatro secciones (4.1 pendiente, 4.2, 4.3 y 4.4) muestren datos correctos
 - Verificar que las tasas de natalidad sean coherentes (tendencia a la baja)
+- Verificar que las causas de mortalidad y totales sean coherentes con años anteriores
 
 ## Archivos de esta dimensión
 
 ```
 dim4/
-├── index.html                    ← Página web (secciones 4.1, 4.2 y 4.3)
+├── index.html                    ← Página web (secciones 4.1, 4.2, 4.3 y 4.4)
 ├── actualizar_discapacidad.py    ← Script para discapacidad
 ├── actualizar_natalidad.py       ← Script para natalidad
+├── actualizar_mortalidad.py      ← Script para mortalidad
 ├── fuentes/
 │   ├── discapacidad/             ← CSV del OSB + PDF de referencia
 │   ├── natalidad/                ← CSV del OSB + Excel proyecciones DANE
-│   └── localidades/              ← Shapefiles (para uso futuro con mapas)
+│   ├── mortalidad/               ← CSV del OSB (DANE-RUAF-ND)
+│   └── localidades/              ← Shapefiles para mapa coroplético
 ├── data/                         ← JSONs generados automáticamente
 │   ├── discapacidad.json
-│   └── natalidad.json
+│   ├── natalidad.json
+│   ├── mortalidad.json
+│   └── localidades.geojson       ← GeoJSON de localidades para mapa
 └── INSTRUCCIONES.md              ← Este archivo
 ```
