@@ -43,7 +43,7 @@ Cada dimensión es una carpeta autocontenida (`dim1/` a `dim7/`). Las instruccio
 | 1. Ser joven | Próximamente | `dim1/` | — |
 | 2. Educación | Próximamente | `dim2/` | — |
 | 4. Salud Integral y Autocuidado | Próximamente | `dim4/` | — |
-| **3. Inclusión Productiva** | **Activa** | `dim3/` |  |
+| **3. Inclusión Productiva** | **Activa** | `dim3/` | — |
 | 4. Salud Integral y Autocuidado | Próximamente | `dim4/` | — |
 | 5. Cultura, Recreación y Deporte | Próximamente | `dim5/` | — |
 | 6. Paz, Convivencia y Justicia | Próximamente | — | — |
