@@ -80,6 +80,12 @@
   ],
   "por_localidad": [
     {
+      "localidad": "Ciudad Bolívar",
+      "nacidos": 4123,
+      "poblacion_mujeres_jovenes": 82192,
+      "tasa_por_mil": 50.16
+    },
+    {
       "localidad": "Los Mártires",
       "nacidos": 577,
       "poblacion_mujeres_jovenes": 12004,
@@ -192,12 +198,6 @@
       "nacidos": 274,
       "poblacion_mujeres_jovenes": 18313,
       "tasa_por_mil": 14.96
-    },
-    {
-      "localidad": "Ciudad Bolívar",
-      "nacidos": 4123,
-      "poblacion_mujeres_jovenes": 0,
-      "tasa_por_mil": null
     }
   ],
   "anio_localidad": 2024,

@@ -14,6 +14,7 @@
 import os
 import csv
 import json
+import unicodedata
 import openpyxl
 
 # ============================================================
@@ -37,6 +38,12 @@ GRUPOS_EDAD = [
 
 # Solo datos desde 2018 (corte de la política)
 ANIO_MIN = 2018
+
+
+def normalizar(nombre):
+    """Quita tildes y pasa a minúsculas para comparar nombres de localidad."""
+    s = unicodedata.normalize('NFD', nombre)
+    return s.encode('ascii', 'ignore').decode().lower().strip()
 
 
 # ============================================================
@@ -249,8 +256,10 @@ def generar_json(nacidos, nacidos_loc, poblacion):
     por_localidad = []
     if ultimo_anio and ultimo_anio in nacidos_loc:
         pob_anio = poblacion.get(ultimo_anio, {})
+        # Índice normalizado para cruzar nombres con/sin tilde
+        pob_norm = {normalizar(k): v for k, v in pob_anio.items()}
         for loc, nac in nacidos_loc[ultimo_anio].items():
-            pob_loc = pob_anio.get(loc, {}).get('total', 0)
+            pob_loc = pob_norm.get(normalizar(loc), {}).get('total', 0)
             tasa = round(nac / pob_loc * 1000, 2) if pob_loc > 0 else None
             por_localidad.append({
                 'localidad': loc,
