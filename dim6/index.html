@@ -131,29 +131,26 @@
       </div>
     </div>
 
-    <!-- Víctima + Percepción -->
-    <div class="grid-2col">
-      <!-- Víctima de delito (donut) -->
-      <div class="card">
-        <div class="card-title">¿Ha sido víctima de un delito?</div>
-        <div class="chart-container" style="height:280px;">
-          <canvas id="chart-victima"></canvas>
-        </div>
-      </div>
-
-      <!-- Percepción seguridad barrio (donut) -->
-      <div class="card">
-        <div class="card-title">Percepción de seguridad en el barrio</div>
-        <div class="chart-container" style="height:280px;">
-          <canvas id="chart-barrio"></canvas>
-        </div>
+    <!-- Víctima de delito (barra apilada) -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-title">¿Ha sido víctima de un delito?</div>
+      <div class="chart-container" style="height:120px;">
+        <canvas id="chart-victima"></canvas>
       </div>
     </div>
 
-    <!-- Percepción seguridad ciudad -->
+    <!-- Percepción seguridad barrio (barra apilada) -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-title">Percepción de seguridad en el barrio</div>
+      <div class="chart-container" style="height:120px;">
+        <canvas id="chart-barrio"></canvas>
+      </div>
+    </div>
+
+    <!-- Percepción seguridad ciudad (barra apilada) -->
     <div class="card" style="margin-bottom:1.5rem;">
       <div class="card-title">Percepción de seguridad en la ciudad</div>
-      <div class="chart-container" style="height:280px;">
+      <div class="chart-container" style="height:120px;">
         <canvas id="chart-ciudad"></canvas>
       </div>
     </div>
@@ -297,107 +294,92 @@ function renderProblemas() {
   });
 }
 
-// --- Donut: víctima de delito ---
+// Plugin para mostrar porcentaje dentro de cada segmento
+const stackedLabelPlugin = {
+  id: 'stackedLabels',
+  afterDatasetsDraw(chart) {
+    const { ctx } = chart;
+    chart.data.datasets.forEach((ds, di) => {
+      const meta = chart.getDatasetMeta(di);
+      meta.data.forEach((bar, i) => {
+        const val = ds.data[0];
+        if (val < 8) return;
+        const x = (bar.x + bar.base) / 2;
+        const y = bar.y;
+        ctx.save();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 13px Segoe UI, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(fmtPct(val), x, y);
+        ctx.restore();
+      });
+    });
+  }
+};
+
+// --- Barra apilada: víctima de delito ---
 function renderVictima() {
   const v = SEG.victima_delito;
   if (!v) return;
 
   if (chartVictima) chartVictima.destroy();
   chartVictima = new Chart(document.getElementById('chart-victima'), {
-    type: 'doughnut',
+    type: 'bar',
     data: {
-      labels: ['Sí', 'No'],
-      datasets: [{
-        data: [v.si, v.no],
-        backgroundColor: ['#c0392b', '#27ae60'],
-        borderWidth: 2,
-        borderColor: '#fff',
-      }]
+      labels: ['¿Ha sido víctima de un delito?'],
+      datasets: [
+        { label: 'Sí', data: [v.si], backgroundColor: '#c0392b', borderRadius: 3 },
+        { label: 'No', data: [v.no], backgroundColor: '#27ae60', borderRadius: 3 }
+      ]
     },
     options: {
+      indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '55%',
       plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { font: { size: 13 }, padding: 16 }
-        },
-        tooltip: {
-          callbacks: {
-            label: ctx => ctx.label + ': ' + fmtPct(ctx.raw) + ' (n=' + fmtNum(v.n) + ')'
-          }
-        }
+        legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtPct(ctx.raw) } }
+      },
+      scales: {
+        x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#ecf0f1' } },
+        y: { stacked: true, display: false }
       }
     },
-    plugins: [{
-      id: 'centerText',
-      afterDraw(chart) {
-        const { ctx, width, height } = chart;
-        ctx.save();
-        ctx.fillStyle = '#c0392b';
-        ctx.font = 'bold 28px Segoe UI, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(fmtPct(v.si), width / 2, height / 2 - 8);
-        ctx.font = '12px Segoe UI, sans-serif';
-        ctx.fillStyle = '#7f8c8d';
-        ctx.fillText('víctimas', width / 2, height / 2 + 16);
-        ctx.restore();
-      }
-    }]
+    plugins: [stackedLabelPlugin]
   });
 }
 
-// --- Donut: percepción barrio ---
+// --- Barra apilada: percepción barrio ---
 function renderBarrio() {
   const p = SEG.percepcion_barrio;
   if (!p) return;
 
   if (chartBarrio) chartBarrio.destroy();
   chartBarrio = new Chart(document.getElementById('chart-barrio'), {
-    type: 'doughnut',
+    type: 'bar',
     data: {
-      labels: ['Seguro', 'Ni seguro ni inseguro', 'Inseguro'],
-      datasets: [{
-        data: [p.seguro, p.ni_seguro_ni_inseguro, p.inseguro],
-        backgroundColor: ['#27ae60', '#f1c40f', '#c0392b'],
-        borderWidth: 2,
-        borderColor: '#fff',
-      }]
+      labels: ['Percepción de seguridad en el barrio'],
+      datasets: [
+        { label: 'Seguro', data: [p.seguro], backgroundColor: '#27ae60', borderRadius: 3 },
+        { label: 'Ni seguro ni inseguro', data: [p.ni_seguro_ni_inseguro], backgroundColor: '#f1c40f' },
+        { label: 'Inseguro', data: [p.inseguro], backgroundColor: '#c0392b', borderRadius: 3 }
+      ]
     },
     options: {
+      indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '55%',
       plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { font: { size: 12 }, padding: 12 }
-        },
-        tooltip: {
-          callbacks: {
-            label: ctx => ctx.label + ': ' + fmtPct(ctx.raw)
-          }
-        }
+        legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtPct(ctx.raw) } }
+      },
+      scales: {
+        x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#ecf0f1' } },
+        y: { stacked: true, display: false }
       }
     },
-    plugins: [{
-      id: 'centerTextBarrio',
-      afterDraw(chart) {
-        const { ctx, width, height } = chart;
-        ctx.save();
-        ctx.fillStyle = '#27ae60';
-        ctx.font = 'bold 26px Segoe UI, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(fmtPct(p.seguro), width / 2, height / 2 - 8);
-        ctx.font = '11px Segoe UI, sans-serif';
-        ctx.fillStyle = '#7f8c8d';
-        ctx.fillText('se sienten seguros', width / 2, height / 2 + 16);
-        ctx.restore();
-      }
-    }]
+    plugins: [stackedLabelPlugin]
   });
 }
 
@@ -459,28 +441,7 @@ function renderCiudad() {
         }
       }
     },
-    plugins: [{
-      id: 'stackedLabels',
-      afterDatasetsDraw(chart) {
-        const { ctx } = chart;
-        chart.data.datasets.forEach((ds, di) => {
-          const meta = chart.getDatasetMeta(di);
-          meta.data.forEach((bar) => {
-            const val = ds.data[0];
-            if (val < 8) return; // no mostrar si es muy angosto
-            const x = (bar.x + bar.base) / 2;
-            const y = bar.y;
-            ctx.save();
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 13px Segoe UI, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(fmtPct(val), x, y);
-            ctx.restore();
-          });
-        });
-      }
-    }]
+    plugins: [stackedLabelPlugin]
   });
 }
 </script>
